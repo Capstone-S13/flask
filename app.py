@@ -79,6 +79,10 @@ def login():
                 return redirect('/store/{}/landing/{}'.format(userAcc.userId, STORE_INCOMING))
     return render_template('login.html', error=error)
 
+@app.route('/signup', methods=['GET'])
+def signup():
+    return render_template('signup.html')
+
 # Customer Landing Page
 @app.route('/customer/<string:userId>/landing/<int:landingTab>', methods=['GET'])
 def customerLandingPage(userId, landingTab):

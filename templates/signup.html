@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Login</title>
+    <title>Sign Up</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
 
@@ -10,7 +10,7 @@
     {% extends "base.html" %}
     {% block content %}
       <form action="" method="post" class="form-signin">
-        <h2>Please login</h2>
+        <h2>Sign Up</h2>
         <div class="form-group text-left">
           <label for="inputEmail">Email address</label>
           <input type="email" id="inputEmail" class="form-control" placeholder="Email Address" name="email" 
@@ -24,8 +24,7 @@
          
         </div>
         
-        <input class="btn btn-lg btn-block mb-1" type="submit" value="Login">
-        <a href="signup">No Account? Sign Up here</a>
+        <input class="btn btn-lg btn-block" type="submit" value="Sign Up">
       </form>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}

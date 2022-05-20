@@ -1,23 +1,34 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <title>Flask Intro - login page</title>
+    <title>Capstone S13 Demo App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+
   </head>
-  <body>
-    <div class="container">
-      <h1>Please login</h1>
-      <br>
-      <form action="" method="post">
-        <input type="text" placeholder="Email" name="email" value="{{
-          request.form.email }}">
-         <input type="password" placeholder="Password" name="password" value="{{
-          request.form.password }}">
-        <input class="btn btn-default" type="submit" value="Login">
+  <body class="text-center">
+    {% extends "base.html" %}
+    {% block content %}
+      <form action="" method="post" class="form-signin">
+        <h2>Please login</h2>
+        <div class="form-group text-left">
+          <label for="inputEmail">Email address</label>
+          <input type="email" id="inputEmail" class="form-control" placeholder="Email Address" name="email" 
+          value="{{request.form.email }}" required autofocus>
+        </div>
+        
+        <div class="form-group mb-3 text-left">
+          <label for="inputPassword">Password</label>
+          <input type="password" id="inputPassword" placeholder="Password" class="form-control" name="password" value="{{
+            request.form.password }}">
+         
+        </div>
+        
+        <input class="btn btn-lg btn-block" type="submit" value="Login">
       </form>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
       {% endif %}
-    </div>
+    {% endblock %}
   </body>
 </html>

@@ -1,4 +1,12 @@
-body {
+*{
+    box-sizing: border-box;
+    padding: 0;
     margin: 0;
-    font-family: sans-serif;
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
 }

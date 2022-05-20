@@ -171,3 +171,7 @@ def set_status(userId, orderId, status):
             return "There was an error updating the order status"
     else:
         return "Order does not belong to user"
+    
+    
+if __name__== "__main__":
+    app.run(debug=True)

@@ -15,21 +15,21 @@
         <div class="form-group text-left">
           <label for="inputAccount">Name</label>
           <input type="text" id="inputAccount" class="form-control" placeholder="First and Last Name" name="name" 
-          value="{{request.form.email }}" required>
+          value="{{request.form.name }}" required>
         </div>
 
         <div class="form-group" class="text-left">
           <label for="inputAccount" class="text-left">Account Type</label>
           <div id="inputAccount"  class="text-left">
             <div class="form-check form-check-inline text-left">
-              <input type="radio" id="radio1" class="form-check-input" placeholder="Email Address" name="email" 
-              value="{{request.form.email }}" required autofocus>
-              <label class="form-check-label" for="radio1">Customer</label>
+              <input type="radio" name="accType" id="accType1" class="form-check-input"
+              value="0" required autofocus>
+              <label class="form-check-label" for="accType1">Customer</label>
             </div>
             <div class="form-check form-check-inline text-left">
-              <input type="radio" id="radio2" class="form-check-input" placeholder="Email Address" name="email" 
-              value="{{request.form.email }}" required autofocus>
-              <label class="form-check-label" for="radio2">Vendor</label>
+              <input type="radio" name="accType" id="accType2" class="form-check-input" 
+              value="1" required autofocus>
+              <label class="form-check-label" for="accType2">Vendor</label>
             </div>
           </div>
         </div>

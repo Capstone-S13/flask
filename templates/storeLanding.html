@@ -28,11 +28,26 @@
           
           
         </nav>
-        <nav class="nav nav-fill bg-yellow justify-content-between pl-3 pr-3">
-            <a class="nav-link active" aria-current="page" href="#">Incoming</a>
-            <a class="nav-link" href="#">Preparing</a>
-            <a class="nav-link" href="#">Delivery</a>
-          </nav>
+        <nav class="tabpanel nav nav-fill bg-yellow justify-content-between pl-3 pr-3">
+            <a class="nav-link orange active" aria-current="page" href="#incoming" role="tab" data-toggle="tab">Incoming</a>
+            <a class="nav-link orange" href="#preparing" role="tab" data-toggle="tab">Preparing</a>
+            <a class="nav-link orange" href="#delivery" role="tab" data-toggle="tab">Delivery</a>
+        </nav>
+
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane fade in active" id="incoming">
+          <ul>
+             <li>dfadsfasf</li>
+             <li>jjh</li>
+             <li>assggg</li>
+          </ul>
+          </div>
+          
+          <div role="tabpanel" class="tab-pane fade" id="preparing">web dev</div>
+        
+          <div role="tabpanel" class="tab-pane fade" id="delivery">Data analysis!#Q$@!#</div>
+        
+        </div>
       </div>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}

@@ -7,7 +7,7 @@
 
   </head>
   <body>
-    {% extends "base.html" %}
+    {% include "base.html" %}
     {% block content %}
     <div class="container-nav">
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-yellow">
@@ -38,24 +38,7 @@
           <div role="tabpanel" class="tab-pane fade in active" id="incoming">
             <div class="container p-3">
               <div class="row">
-                <div class="col-sm-6 mb-3">
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Special title treatment</h5>
-                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      <a href="#" class="btn">Go somewhere</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-sm-6  mb-3">
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Special title treatment</h5>
-                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      <a href="#" class="btn">Go somewhere</a>
-                    </div>
-                  </div>
-                </div>
+                {% include "cards/incomingCard.html" %}
               </div>
             </div>
           
@@ -63,15 +46,17 @@
           
           <div role="tabpanel" class="tab-pane fade" id="preparing">
             <div class="container p-3">
-              <h3>2</h3>
-              <p>ello</p>
+              <div class="row">
+                {% include "cards/preparingCard.html" %}
+              </div>
             </div>
           </div>
         
           <div role="tabpanel" class="tab-pane fade" id="delivery">
             <div class="container p-3">
-              <h3>3</h3>
-              <p>ello</p>
+              <div class="row">
+                {% include "cards/deliveryCard.html" %}
+              </div>
             </div>
           </div>
         
@@ -80,6 +65,6 @@
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
       {% endif %}
-    {% endblock %}
+    {% endblock content %}
   </body>
 </html>

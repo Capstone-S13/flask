@@ -119,6 +119,7 @@ def delete(userId, orderId):
 @app.route('/store/<string:userId>/landing/<int:landingTab>')
 def storeLandingPage(userId, landingTab):    
     orders = system.get_store_orders(userId)
+    
     return render_template("storeLanding.html", orders=orders, landingTab=landingTab)
 
 # Store Viewing Single Order Page

@@ -15,6 +15,7 @@
     --first-color: #FFEEBF;
     --title-color: #FF7F5C;
     --text-color: #1e137c;
+    --success-color: #72CEC1;
     --text-color-light: #3c5ca6;
     --input-color: #f1effa;
     --body-color: hsl(var(--hue-color), 60%, 99%);
@@ -75,6 +76,20 @@
     color : var(--title-color);
 }
 
+.text-color {
+    color: var(--text-color);
+}
+
 .fixed-width {
     width: 70%;
+}
+
+.btn-outline-red {
+    color: var(--title-color);
+    border-color: var(--title-color) !important;
+}
+
+.btn-outline-green {
+    color: var(--success-color);
+    border-color: var(--success-color) !important;
 }

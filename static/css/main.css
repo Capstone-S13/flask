@@ -93,3 +93,9 @@
     color: var(--success-color);
     border-color: var(--success-color) !important;
 }
+
+.btn-yellow {
+    color: var(--title-color);
+    font-weight: 800;
+    background-color: var(--first-color);
+}

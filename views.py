@@ -72,7 +72,8 @@ def customerLandingPage(userId, landingTab):
     browse = system.get_all_stores()
     # orders = system.get_customer_orders(userId)
     orders = None
-    return render_template("customerLanding.html", browse=browse, orders=orders, landingTab=landingTab)
+    # return render_template("customerLanding.html", browse=browse, orders=orders, landingTab=landingTab)
+    return render_template("customerLanding.html", landingTab=landingTab)
 
 # Customer Creating Order
 @app.route('/customer/<string:userId>/create/<string:storeId>')

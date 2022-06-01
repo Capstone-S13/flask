@@ -1,19 +1,19 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Login</title>
+    <title>Customer Landing</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
 
   </head>
   <body>
-    {% extends "base.html" %}
+    {% include "base.html" %}
     {% block content %}
     <div class="container-nav">
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-yellow">
             <div class="fixed-width">
                 <a class="nav-icon orange col" href="#">Customer</a>
-                <span class="orange col">Browse and view all orders and their status</span>
+                <span class="orange col">View your orders</span>
             </div>
           
           <div class="dropdown show">
@@ -28,14 +28,35 @@
           
           
         </nav>
-        <nav class="nav nav-fill bg-yellow justify-content-between pl-3 pr-3">
-            <a class="nav-link active" aria-current="page" href="#">Shops</a>
-            <a class="nav-link" href="#">Delivery</a>
-          </nav>
+        <nav class="tabpanel nav nav-fill bg-yellow justify-content-around">
+            <a class="nav-link orange active" aria-current="page" href="#shops" role="tab" data-toggle="tab">Shops</a>
+            <a class="nav-link orange" href="#delivery" role="tab" data-toggle="tab">Delivery</a>
+        </nav>
+
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane fade in active" id="shops">
+            <div class="container p-3">
+              <div class="row">
+                {% include "cards/orderCard.html" %}
+              </div>
+            </div>
+          
+          </div>
+          
+          <div role="tabpanel" class="tab-pane fade" id="delivery">
+            <div class="container p-3">
+              <div class="row">
+                {% include "cards/deliveryCard.html" %}
+              </div>
+            </div>
+          </div>
+
+        
+        </div>
       </div>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
       {% endif %}
-    {% endblock %}
+    {% endblock content %}
   </body>
 </html>

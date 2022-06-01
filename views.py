@@ -151,6 +151,11 @@ def set_status(userId, orderId, status):
         return redirect('/store/{}/landing/{}'.format(userId, STORE_INCOMING))
     else:
         return statusUpdateStatus
+
+# Vendor Settings Page
+@app.route('/store/<string:userId>/settings')
+def settings():
+    return render_template("storeSettings.html")
     
 if __name__== "__main__":
     app.run(debug=True)

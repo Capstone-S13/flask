@@ -22,6 +22,7 @@
             </a>
           
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="#">Settings</a>
               <a class="dropdown-item" href="#">Logout</a>
             </div>
           </div>
@@ -36,10 +37,11 @@
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade in active" id="shops">
             <div class="container p-3">
-              <div class="row">
-                {% for store in stores %}
+                
                 <div class="row">
-                  <div class="col-6">
+                  {% for store in stores %}
+                  <div class="col mb-3">
+                    
                       <div class="card">
                           <img src="https://static.wikia.nocookie.net/logopedia/images/c/c0/GrabFood_%282016%29.svg/revision/latest?cb=20210219083903" class="card-img-top" alt="...">
                           <div class="card-body">
@@ -47,11 +49,11 @@
                           <a href="/customer/{{customerId}}/create/{{store.userId}}" class="btn btn-yellow btn-block">Buy here</a>
                           </div>
                       </div>
-                      
+                    
                   </div>
+                {% endfor %} 
               </div>
-                {% endfor %}
-              </div>
+              
             </div>
           
           </div>

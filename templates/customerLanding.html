@@ -1,24 +1,41 @@
-CUSTOMER_SHOPS = 0
-CUSTOMER_DELIVERY = 1
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
 
-{% extends 'base.html' %}
-
-{% block head %}
-<title>Customer</title>
-{% endblock %}
-
-{% block body %}
-<div class="content">
-    <h1 style="text-align: center">Landing Page</h1>
-
-    {% if landingPage == CUSTOMER_SHOPS %}
-
-    {% elif landingPage == CUSTOMER_DELIVERY %}
-
-    {% endif %}
-
-
-    
-</div>
-
-{% endblock %}
+  </head>
+  <body>
+    {% extends "base.html" %}
+    {% block content %}
+    <div class="container-nav">
+        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-yellow">
+            <div class="fixed-width">
+                <a class="nav-icon orange col" href="#">Customer</a>
+                <span class="orange col">Browse and view all orders and their status</span>
+            </div>
+          
+          <div class="dropdown show">
+            <a class="btn navbar-toggler-icon orange" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              
+            </a>
+          
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="#">Logout</a>
+            </div>
+          </div>
+          
+          
+        </nav>
+        <nav class="nav nav-fill bg-yellow justify-content-between pl-3 pr-3">
+            <a class="nav-link active" aria-current="page" href="#">Shops</a>
+            <a class="nav-link" href="#">Delivery</a>
+          </nav>
+      </div>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    {% endblock %}
+  </body>
+</html>

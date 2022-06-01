@@ -34,24 +34,24 @@ def check_login(email, password):
     else:
         return "approved", userAcc.userId, userAcc.accountType
 
+# ADD LOGIC TO CHECK FOR DUPLICATE EMAIL
 def create_acc(newName, newEmail, newPassword, accType):
     uuid = uuid4()
-    if accType == "0":
-        newType = CUSTOMER
-    else:
-        newType = STORE
-    new_acc = UserDb(userId = str(uuid), email = newEmail, name = newName, password = newPassword, accountType = int(accType))
+    new_acc = UserDb(userId = str(uuid),
+                     email = newEmail,
+                     name = newName,
+                     password = newPassword,
+                     accountType = int(accType))
     try:
         db.session.add(new_acc)
         db.session.commit()
-        print(uuid, newEmail, newName, newPassword, accType)
         return True
     except Exception as e:
-        print(e)  
+        print(e)
         return False
     
 def get_all_stores():
-    return UserDb.query.filter_by(accountType=STORE)
+    return UserDb.query.filter_by(accountType=STORE).all()
 
 def get_customer_orders(customerId):
     return OrderDb.query.filter_by(customerId=customerId)
@@ -61,13 +61,16 @@ def get_store_orders(storeId):
     
 def create_order(userId, storeId):
     orderId = uuid4()
-    new_order = OrderDb(orderId=orderId, customerId=userId, storeId=storeId, status=ORDER_RECEIVED)
+    new_order = OrderDb(orderId=orderId,
+                        customerId=userId,
+                        storeId=storeId,
+                        status=ORDER_RECEIVED)
     try:
         db.session.add(new_order)
         db.session.commit()
-        return False
-    except:
         return True
+    except:
+        return False
     
 def get_order(userId, orderId):
     return OrderDb.query.get_or_404(orderId)

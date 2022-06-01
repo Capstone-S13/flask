@@ -51,14 +51,10 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        # if request.form['name'] == None or request.form['email'] == None or request.form['password'] == None or request.form.getlist['accType'] == None:
-        #     pass
-        # else:
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-        accType = request.form['accType']
-        create_status = system.create_acc(name, email, password, accType)
+        create_status = system.create_acc(request.form['name'], 
+                                          request.form['email'], 
+                                          request.form['password'], 
+                                          request.form['accType'])
         if create_status:
             return redirect('/')
         else:
@@ -67,12 +63,12 @@ def signup():
 
 
 # Customer Landing Page
-@app.route('/customer/<string:userId>/landing/<int:landingTab>', methods=['GET'])
+@app.route('/customer/<string:userId>/landing/<int:landingTab>', methods=['POST', 'GET'])
 def customerLandingPage(userId, landingTab):
-    browse = system.get_all_stores()
+    stores = system.get_all_stores()
     # orders = system.get_customer_orders(userId)
     orders = None
-    return render_template("customerLanding.html", browse=browse, orders=orders, landingTab=landingTab)
+    return render_template("customerLanding.html", stores=stores, landingTab=landingTab)
 
 # Customer Creating Order
 @app.route('/customer/<string:userId>/create/<string:storeId>')

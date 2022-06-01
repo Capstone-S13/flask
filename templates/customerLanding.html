@@ -37,7 +37,20 @@
           <div role="tabpanel" class="tab-pane fade in active" id="shops">
             <div class="container p-3">
               <div class="row">
-                {% include "cards/orderCard.html" %}
+                {% for store in stores %}
+                <div class="row">
+                  <div class="col-6">
+                      <div class="card">
+                          <img src="https://static.wikia.nocookie.net/logopedia/images/c/c0/GrabFood_%282016%29.svg/revision/latest?cb=20210219083903" class="card-img-top" alt="...">
+                          <div class="card-body">
+                          <h5 class="card-title text-color text-center">{{store.name}}</h5>
+                          <a href="#" class="btn btn-yellow btn-block">Buy here</a>
+                          </div>
+                      </div>
+                      
+                  </div>
+              </div>
+                {% endfor %}
               </div>
             </div>
           

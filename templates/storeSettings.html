@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+
+  </head>
+  <body>
+    {% include "base.html" %}
+    {% block content %}
+    <div class="container-nav">
+        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-yellow">
+            <div class="fixed-width">
+                <a class="nav-icon orange col" href="#">Shop Owner</a>
+                <span class="orange col">Store Settings</span>
+            </div>
+          
+          <div class="dropdown show">
+            <a class="btn navbar-toggler-icon orange" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              
+            </a>
+          
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="settings">Settings</a>
+              <a class="dropdown-item" href="#">Logout</a>
+            </div>
+          </div>
+          
+          
+        </nav>
+        <div class="container">
+          <p>settings page test</p>
+        </div>
+      </div>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    {% endblock content %}
+  </body>
+</html>

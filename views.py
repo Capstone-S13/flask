@@ -69,6 +69,8 @@ def customerLandingPage(userId, landingTab):
     # orders = system.get_customer_orders(userId)
     orders = None
     return render_template("customerLanding.html", stores=stores, landingTab=landingTab)
+    # return render_template("customerLanding.html", browse=browse, orders=orders, landingTab=landingTab)
+    # return render_template("customerLanding.html", landingTab=landingTab)
 
 # Customer Creating Order
 @app.route('/customer/<string:userId>/create/<string:storeId>')
@@ -115,6 +117,7 @@ def delete(userId, orderId):
 @app.route('/store/<string:userId>/landing/<int:landingTab>')
 def storeLandingPage(userId, landingTab):    
     orders = system.get_store_orders(userId)
+    
     return render_template("storeLanding.html", orders=orders, landingTab=landingTab)
 
 # Store Viewing Single Order Page

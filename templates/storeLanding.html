@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Login</title>
+    <title>Store Landing</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
 
   </head>
   <body>
-    {% extends "base.html" %}
+    {% include "base.html" %}
     {% block content %}
     <div class="container-nav">
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-yellow">
@@ -28,15 +28,43 @@
           
           
         </nav>
-        <nav class="nav nav-fill bg-yellow justify-content-between pl-3 pr-3">
-            <a class="nav-link active" aria-current="page" href="#">Incoming</a>
-            <a class="nav-link" href="#">Preparing</a>
-            <a class="nav-link" href="#">Delivery</a>
-          </nav>
+        <nav class="tabpanel nav nav-fill bg-yellow justify-content-between pl-3 pr-3">
+            <a class="nav-link orange active" aria-current="page" href="#incoming" role="tab" data-toggle="tab">Incoming</a>
+            <a class="nav-link orange" href="#preparing" role="tab" data-toggle="tab">Preparing</a>
+            <a class="nav-link orange" href="#delivery" role="tab" data-toggle="tab">Delivery</a>
+        </nav>
+
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane fade in active" id="incoming">
+            <div class="container p-3">
+              <div class="row">
+                {% include "cards/incomingCard.html" %}
+              </div>
+            </div>
+          
+          </div>
+          
+          <div role="tabpanel" class="tab-pane fade" id="preparing">
+            <div class="container p-3">
+              <div class="row">
+                {% include "cards/preparingCard.html" %}
+              </div>
+            </div>
+          </div>
+        
+          <div role="tabpanel" class="tab-pane fade" id="delivery">
+            <div class="container p-3">
+              <div class="row">
+                {% include "cards/deliveryCard.html" %}
+              </div>
+            </div>
+          </div>
+        
+        </div>
       </div>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
       {% endif %}
-    {% endblock %}
+    {% endblock content %}
   </body>
 </html>

@@ -17,15 +17,16 @@ STORE_PREPARING = 1
 STORE_DELIVERY = 2
 
 # Order Statuses
-ORDER_RECEIVED = 0
-ROBOT_DISPATCHED = 1
-AT_STORE_HUB = 2
-BETWEEN_HUBS = 3
-AT_DEST_HUB = 4
-ARRIVED = 5
-DELIVERED = 6
-CANCELLED = 7
-FAILED = 8
+ORDER_SENT = 0
+ORDER_RECEIVED = 1
+ROBOT_DISPATCHED = 2
+AT_STORE_HUB = 3
+BETWEEN_HUBS = 4
+AT_DEST_HUB = 5
+ARRIVED = 6
+DELIVERED = 7
+CANCELLED = 8
+FAILED = 9
 
 def check_login(email, password):
     userAcc = UserDb.query.filter_by(email=email).first()
@@ -57,20 +58,33 @@ def get_customer_orders(customerId):
     return OrderDb.query.filter_by(customerId=customerId).all()
 
 def get_store_orders(storeId):
-    return OrderDb.query.filter_by(storeId=storeId).all()
+    orders = OrderDb.query.filter_by(storeId=storeId).all()
+    incoming = OrderDb.query.filter_by(storeId=storeId,
+                                      status=ORDER_SENT).all()
+    preparing = OrderDb.query.filter_by(storeId=storeId,
+                                       status=ORDER_RECEIVED or
+                                            ROBOT_DISPATCHED).all()
+    delivery = OrderDb.query.filter_by(storeId=storeId,
+                                      status=AT_STORE_HUB or
+                                            BETWEEN_HUBS or
+                                            AT_DEST_HUB or
+                                            ARRIVED).all()
+    return orders, incoming, preparing, delivery
     
 def create_order(userId, storeId):
     orderId = uuid4()
-    new_order = OrderDb(orderId=orderId,
+    new_order = OrderDb(orderId=str(orderId),
                         customerId=userId,
                         storeId=storeId,
-                        status=ORDER_RECEIVED)
+                        orderDetails="Something Cool",
+                        status=ORDER_SENT)
     try:
         db.session.add(new_order)
         db.session.commit()
-        return True
-    except:
         return False
+    except Exception as e:
+        print(e)
+        return True
     
 def get_order(userId, orderId):
     return OrderDb.query.get_or_404(orderId)

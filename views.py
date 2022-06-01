@@ -7,25 +7,26 @@ import system
 CUSTOMER = 0
 STORE = 1
 
-# Customer Landing Tab
-CUSTOMER_SHOPS = 0
-CUSTOMER_DELIVERY = 1
+# # Customer Landing Tab
+# CUSTOMER_SHOPS = 0
+# CUSTOMER_DELIVERY = 1
 
-# Store Landing Tab
-STORE_INCOMING = 0
-STORE_PREPARING = 1
-STORE_DELIVERY = 2
+# # Store Landing Tab
+# STORE_INCOMING = 0
+# STORE_PREPARING = 1
+# STORE_DELIVERY = 2
 
 # Order Statuses
-ORDER_RECEIVED = 0
-ROBOT_DISPATCHED = 1
-AT_STORE_HUB = 2
-BETWEEN_HUBS = 3
-AT_DEST_HUB = 4
-ARRIVED = 5
-DELIVERED = 6
-CANCELLED = 7
-FAILED = 8
+ORDER_SENT = 0
+ORDER_RECEIVED = 1
+ROBOT_DISPATCHED = 2
+AT_STORE_HUB = 3
+BETWEEN_HUBS = 4
+AT_DEST_HUB = 5
+ARRIVED = 6
+DELIVERED = 7
+CANCELLED = 8
+FAILED = 9
 
 # Login Page
 @app.route('/', methods = ['GET', 'POST'])
@@ -39,9 +40,9 @@ def login():
             # push to different home pages
             # cache details somewhere?
             if accType == CUSTOMER:
-                return redirect('/customer/{}/landing/{}'.format(userId, CUSTOMER_SHOPS))
+                return redirect('/customer/{}/landing'.format(userId))
             else:
-                return redirect('/store/{}/landing/{}'.format(userId, STORE_INCOMING))
+                return redirect('/store/{}/landing'.format(userId))
         else:
             error = loginApprove
             
@@ -63,23 +64,24 @@ def signup():
 
 
 # Customer Landing Page
-@app.route('/customer/<string:userId>/landing/<int:landingTab>', methods=['POST', 'GET'])
-def customerLandingPage(userId, landingTab):
+@app.route('/customer/<string:userId>/landing', methods=['POST', 'GET'])
+def customerLandingPage(userId):
     stores = system.get_all_stores()
-    # orders = system.get_customer_orders(userId)
-    orders = None
-    return render_template("customerLanding.html", customerId=userId, stores=stores, landingTab=landingTab)
+    orders = system.get_customer_orders(userId)
+    return render_template("customerLanding.html",
+                           customerId=userId,
+                           stores=stores,
+                           orders=orders)
 
 # Customer Creating Order
 @app.route('/customer/<string:userId>/create/<string:storeId>')
 def create(userId, storeId):
     error = system.create_order(userId, storeId)
-    
     if error:
         return "There was an error creating the order"
     else:
         print("ORDER CREATED!!")
-        return redirect("/customer/{}/landing/{}".format(userId, CUSTOMER_SHOPS))
+        return redirect("/customer/{}/landing".format(userId))
         
 
 # Customer Viewing Single Order
@@ -110,14 +112,22 @@ def delete(userId, orderId):
 # Customer Retrieve Order Status (refresh button?)
 @app.route('/customer/<string:userId>/order/<string:orderId>/status')
 
+# Vendor Settings Page
+@app.route('/customer/<string:userId>/settings', methods=['POST', 'GET'])
+def customerSettings(userId):
+    return render_template("customerSettings.html")
 
 
 # Store Landing Page
-@app.route('/store/<string:userId>/landing/<int:landingTab>')
-def storeLandingPage(userId, landingTab):    
-    orders = system.get_store_orders(userId)
-    
-    return render_template("storeLanding.html", orders=orders, landingTab=landingTab)
+@app.route('/store/<string:userId>/landing')
+def storeLandingPage(userId):
+    orders, incoming, preparing, delivery = system.get_store_orders(userId)
+    # print(orders, incoming, preparing, delivery)
+    return render_template("storeLanding.html",
+                           storeId=userId,
+                           incoming=incoming,
+                           preparing=preparing,
+                           delivery=delivery)
 
 # Store Viewing Single Order Page
 @app.route('/store/<string:userId>/order/<string:orderId>', methods=['POST', 'GET'])
@@ -135,7 +145,7 @@ def reject(userId, orderId):
     #     try:
     #         OrderDb.session.delete(order_to_delete)
     #         OrderDb.session.commit()
-    #         return redirect("/store/{}/landing/{}".format(userId, STORE_INCOMING))
+    #         return redirect("/store/{}/landing".format(userId))
     #     except:
     #         return "There was an error deleting the order"
     # else:
@@ -148,14 +158,24 @@ def set_status(userId, orderId, status):
     statusUpdateStatus = system.set_order_status(userId, orderId, status)
     
     if statusUpdateStatus == "success":
-        return redirect('/store/{}/landing/{}'.format(userId, STORE_INCOMING))
+        return redirect('/store/{}/landing'.format(userId))
     else:
         return statusUpdateStatus
 
 # Vendor Settings Page
-@app.route('/store/<string:userId>/settings')
-def settings():
+@app.route('/store/<string:userId>/settings', methods=['POST', 'GET'])
+def storeSettings(userId):
     return render_template("storeSettings.html")
+
+
+# Logout
+# @app.route("/logout")
+# @login_required
+# def logout():
+#     base.flask_login.logout_user()
+#     return redirect("/")
+    
+
     
 if __name__== "__main__":
     app.run(debug=True)

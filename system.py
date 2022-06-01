@@ -54,10 +54,10 @@ def get_all_stores():
     return UserDb.query.filter_by(accountType=STORE).all()
 
 def get_customer_orders(customerId):
-    return OrderDb.query.filter_by(customerId=customerId)
+    return OrderDb.query.filter_by(customerId=customerId).all()
 
 def get_store_orders(storeId):
-    return OrderDb.query.filter_by(storeId=storeId)
+    return OrderDb.query.filter_by(storeId=storeId).all()
     
 def create_order(userId, storeId):
     orderId = uuid4()
@@ -101,5 +101,3 @@ def set_order_status(storeId, orderId, status):
             return "There was an error updating the order status"
     else:
         return "Order does not belong to user"
-    
-    return

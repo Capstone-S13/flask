@@ -68,9 +68,7 @@ def customerLandingPage(userId, landingTab):
     stores = system.get_all_stores()
     # orders = system.get_customer_orders(userId)
     orders = None
-    return render_template("customerLanding.html", stores=stores, landingTab=landingTab)
-    # return render_template("customerLanding.html", browse=browse, orders=orders, landingTab=landingTab)
-    # return render_template("customerLanding.html", landingTab=landingTab)
+    return render_template("customerLanding.html", customerId=userId, stores=stores, landingTab=landingTab)
 
 # Customer Creating Order
 @app.route('/customer/<string:userId>/create/<string:storeId>')
@@ -80,6 +78,7 @@ def create(userId, storeId):
     if error:
         return "There was an error creating the order"
     else:
+        print("ORDER CREATED!!")
         return redirect("/customer/{}/landing/{}".format(userId, CUSTOMER_SHOPS))
         
 

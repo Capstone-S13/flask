@@ -37,8 +37,8 @@
 
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade in active" id="incoming">
-            <div class="container p-3">
-              <div class="row">
+            <div class="container">
+              <div class="row p-3">
                 {% for order in incoming %}
                 <div class="card">
                   <div class="card-body">
@@ -60,7 +60,17 @@
           <div role="tabpanel" class="tab-pane fade" id="preparing">
             <div class="container p-3">
               <div class="row">
-                {% include "cards/preparingCard.html" %}
+                {% for order in preparing %}
+                <div class="col-sm-6 mb-3">
+                  <div class="card">
+                  <div class="card-body">
+                      <h5 class="card-title text-color">{{order}}</h5>
+                      <p class="card-text text-color">Customer Name here</p>
+                      <a href="#" class="m-1 btn col btn-outline-green">Ready for Robot</a>
+                  </div>
+                  </div>
+              </div>
+                {% endfor %}
               </div>
             </div>
           </div>
@@ -68,7 +78,18 @@
           <div role="tabpanel" class="tab-pane fade" id="delivery">
             <div class="container p-3">
               <div class="row">
-                {% include "cards/deliveryCard.html" %}
+                {% for order in delivery %}
+                <div class="col-sm-6 mb-3">
+                  <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title text-color">{{order}}</h5>
+                    <p class="card-text text-color">Customer Name here</p>
+                    <p class="card-text text-color">Status:</p>
+                    <span class="card-text text-color">instructions here</span>
+                  </div>
+                  </div>
+              </div>
+                {% endfor %}
               </div>
             </div>
           </div>

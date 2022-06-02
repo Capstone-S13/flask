@@ -123,6 +123,7 @@ def customerSettings(userId):
 def storeLandingPage(userId):
     orders, incoming, preparing, delivery = system.get_store_orders(userId)
     # print(orders, incoming, preparing, delivery)
+    print(incoming)
     return render_template("storeLanding.html",
                            storeId=userId,
                            incoming=incoming,
@@ -150,7 +151,7 @@ def reject(userId, orderId):
     #         return "There was an error deleting the order"
     # else:
     #     return "Order does not belong to user"
-    return
+    return render_template("storeLanding.html")
 
 # Update Order (Status)
 @app.route('/store/<string:userId>/order/<string:orderId>/<int:status>')

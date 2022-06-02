@@ -39,7 +39,19 @@
           <div role="tabpanel" class="tab-pane fade in active" id="incoming">
             <div class="container p-3">
               <div class="row">
-                {% include "cards/incomingCard.html" %}
+                {% for order in incoming %}
+                <div class="card">
+                  <div class="card-body">
+                      <h5 class="card-title text-color">Order Number: {{order.orderId}}</h5>
+                      <p class="card-text text-color">Customer Name: {{order.customerId}}</p>
+                      <div class="row align-items-start">
+                          <a href="/store/{{order.storeId}}/order/{{order.orderId}}/delete" class="m-1 btn col btn-outline-red">Reject Order</a>
+                          <a href="#" class="m-1 btn col btn-outline-green">Accept Order</a>
+                      </div>
+                      
+                  </div>
+                  </div>
+                {% endfor %}
               </div>
             </div>
           

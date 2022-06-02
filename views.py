@@ -166,7 +166,9 @@ def set_status(userId, orderId, status):
 # Vendor Settings Page
 @app.route('/store/<string:userId>/settings', methods=['POST', 'GET'])
 def storeSettings(userId):
-    return render_template("storeSettings.html")
+    user = system.get_vendor_details(userId)
+    print(user)
+    return render_template("storeSettings.html", user=user)
 
 
 # Logout

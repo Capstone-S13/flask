@@ -70,6 +70,11 @@ def get_store_orders(storeId):
                                             AT_DEST_HUB or
                                             ARRIVED).all()
     return orders, incoming, preparing, delivery
+
+def get_vendor_details(userId):
+    #this should return the entire row
+    return UserDb.query.filter_by(accountType=STORE,
+                                userId=userId).all()
     
 def create_order(userId, storeId):
     orderId = uuid4()

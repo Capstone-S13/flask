@@ -121,11 +121,12 @@ def customerSettings(userId):
 # Store Landing Page
 @app.route('/store/<string:userId>/landing')
 def storeLandingPage(userId):
-    orders, incoming, preparing, delivery = system.get_store_orders(userId)
+    customerNames, incoming, preparing, delivery = system.get_store_orders(userId)
     # print(orders, incoming, preparing, delivery)
-    print(incoming)
+    print(customerNames)
     return render_template("storeLanding.html",
                            storeId=userId,
+                           customerNames = customerNames,
                            incoming=incoming,
                            preparing=preparing,
                            delivery=delivery)

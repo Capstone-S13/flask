@@ -1,5 +1,6 @@
 from base import app
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy(app)
 
@@ -24,6 +25,7 @@ class OrderDb(db.Model):
     orderDetails = db.Column(db.String(1000), nullable=False) # do we need this since we just doing 1 item per store
     status = db.Column(db.Integer, nullable=False)
     robotID = db.Column(db.String(50))
+    dateCreated = db.Column(db.DateTime, default=datetime.utcnow)
 
 class IngressDb(db.Model):
     __bind_key__ = 'ingress'

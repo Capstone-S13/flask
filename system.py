@@ -55,10 +55,23 @@ def get_all_stores():
     return UserDb.query.filter_by(accountType=STORE).all()
 
 def get_customer_orders(customerId):
-    return OrderDb.query.filter_by(customerId=customerId).all()
+    orders = OrderDb.query.filter_by(customerId=customerId).all()
+    storeNames = {}
+    for order in orders:
+        userId = order.storeId
+        if userId not in storeNames:
+            newName = UserDb.query.filter_by(userId=userId).first().name
+            storeNames[userId] = newName
+    return storeNames, orders
 
 def get_store_orders(storeId):
     orders = OrderDb.query.filter_by(storeId=storeId).all()
+    customerNames = {}
+    for order in orders:
+        userId = order.customerId
+        if userId not in customerNames:
+            newName = UserDb.query.filter_by(userId=userId).first().name
+            customerNames[userId] = newName
     incoming = OrderDb.query.filter_by(storeId=storeId,
                                       status=ORDER_SENT).all()
     preparing = OrderDb.query.filter_by(storeId=storeId,
@@ -69,7 +82,7 @@ def get_store_orders(storeId):
                                             BETWEEN_HUBS or
                                             AT_DEST_HUB or
                                             ARRIVED).all()
-    return orders, incoming, preparing, delivery
+    return customerNames, incoming, preparing, delivery
 
 def get_vendor_details(userId):
     #this should return the entire row

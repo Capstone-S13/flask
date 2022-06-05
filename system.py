@@ -104,7 +104,7 @@ def create_order(userId, storeId):
         print(e)
         return True
     
-def get_order(userId, orderId):
+def get_order(orderId):
     return OrderDb.query.get_or_404(orderId)
 
 # change order status first then when the other party acknowlege then delete?
@@ -119,7 +119,6 @@ def delete_order(userId, orderId):
             return "There was an error deleting the order"
     else:
         return "Order does not belong to user"
-    return
 
 def set_order_status(storeId, orderId, status):
     order_to_update = OrderDb.query.get_or_404(orderId)
@@ -128,8 +127,8 @@ def set_order_status(storeId, orderId, status):
         try:
             order_to_update.status = status
             db.session.commit()
-            return "success"
-        except:
-            return "There was an error updating the order status"
-    else:
-        return "Order does not belong to user"
+            return True
+        except Exception as e:
+            print(e)
+            return False
+    return False

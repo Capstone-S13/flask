@@ -1,7 +1,13 @@
 from base import app
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, Blueprint
+# from flask_login import LoginManager, login_user
+# from flask_login_multi.login_manager import LoginManager
 from datetime import datetime
+from models import UserDb
 import system
+
+# login_manager = LoginManager()
+# login_manager.init_app(app)
 
 # Account Type
 CUSTOMER = 0
@@ -28,6 +34,13 @@ DELIVERED = 7
 CANCELLED = 8
 FAILED = 9
 
+# views = Blueprint('views', __name__)
+
+# @login_manager.user_loader
+# def load_user(user_id):
+    
+#     return UserDb.query.get(str(user_id))
+
 # Login Page
 @app.route('/', methods = ['GET', 'POST'])
 def login():
@@ -39,6 +52,7 @@ def login():
             # check account type (customer or store)
             # push to different home pages
             # cache details somewhere?
+            # login_user(UserDb)
             if accType == CUSTOMER:
                 return redirect('/customer/{}/landing'.format(userId))
             else:
@@ -117,13 +131,14 @@ def delete(userId, orderId):
 def customerSettings(userId):
     return render_template("customerSettings.html")
 
-
 # Store Landing Page
 @app.route('/store/<string:userId>/landing')
 def storeLandingPage(userId):
     customerNames, incoming, preparing, delivery = system.get_store_orders(userId)
     # print(orders, incoming, preparing, delivery)
     print(customerNames)
+    print(incoming)
+    print(preparing)
     return render_template("storeLanding.html",
                            storeId=userId,
                            customerNames = customerNames,
@@ -131,17 +146,32 @@ def storeLandingPage(userId):
                            preparing=preparing,
                            delivery=delivery)
 
-# Store Viewing Single Order Page
+# Store Update Order Status
 @app.route('/store/<string:userId>/order/<string:orderId>', methods=['POST', 'GET'])
+def order(userId, orderId):
+    
+    if request.method == "POST":
+        print(request.form['order_button'])
+        updateStatus = system.set_order_status(userId, orderId, int(request.form['order_button']))
+        print(updateStatus)
+        if updateStatus == "success":
+            print("ORDER UPDATED!!")
+            return redirect("/store/{}/landing".format(userId))
+    print("There was an error updating order status")
+    return redirect("/store/{}/landing".format(userId))
+
+
+# Store Viewing Single Order Page
+# @app.route('/store/<string:userId>/order/<string:orderId>', methods=['POST', 'GET'])
 # def order(userId, orderId):
 #     order = system.get_order(userId, orderId)
 #     return render_template("order.html", order=order, userId=userId)
 ########################### Create Order HTML #########################################
 
 # Store Reject Order
-@app.route('/store/<string:userId>/order/<string:orderId>/delete')
-def reject(userId, orderId):
-    deleteStatus = system.delete_order(userId, orderId)
+# @app.route('/store/<string:userId>/order/<string:orderId>/delete')
+# def reject(userId, orderId):
+#     deleteStatus = system.delete_order(userId, orderId)
     
     # if order_to_delete.storeId == userId:
     #     try:
@@ -152,7 +182,7 @@ def reject(userId, orderId):
     #         return "There was an error deleting the order"
     # else:
     #     return "Order does not belong to user"
-    return render_template("storeLanding.html")
+    # return render_template("storeLanding.html")
 
 # Update Order (Status)
 @app.route('/store/<string:userId>/order/<string:orderId>/<int:status>')

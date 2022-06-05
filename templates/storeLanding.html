@@ -44,11 +44,10 @@
                   <div class="card-body">
                       <h5 class="card-title text-color">Order Number: {{order.dateCreated}}</h5>
                       <p class="card-text text-color">Customer Name: {{customerNames[order.customerId]}}</p>
-                      <div class="row align-items-start">
-                          <a href="/store/{{order.storeId}}/order/{{order.orderId}}/delete" class="m-1 btn col btn-outline-red">Reject Order</a>
-                          <a href="#" class="m-1 btn col btn-outline-green">Accept Order</a>
-                      </div>
-                      
+                        <form action="/store/{{order.storeId}}/order/{{order.orderId}}" method="POST" class="row align-items-start">
+                          <button name="order_button" value="8" class="m-1 btn col btn-outline-red">Reject Order</button>
+                          <button name="order_button" value="1" class="m-1 btn col btn-outline-green">Accept Order</button>
+                        </form>
                   </div>
                   </div>
                 {% endfor %}
@@ -64,9 +63,11 @@
                 <div class="col-sm-6 mb-3">
                   <div class="card">
                   <div class="card-body">
-                      <h5 class="card-title text-color">{{order}}</h5>
-                      <p class="card-text text-color">Customer Name here</p>
-                      <a href="#" class="m-1 btn col btn-outline-green">Ready for Robot</a>
+                    <h5 class="card-title text-color">{{order}}</h5>
+                    <p class="card-text text-color">Customer Name here</p>
+                    <form action="/store/{{order.storeId}}/order/{{order.orderId}}" method="POST" class="row align-items-start">
+                      <button name="order_button" value="2" class="m-1 btn col btn-outline-green">Ready for Robot</button>
+                    </form>
                   </div>
                   </div>
               </div>

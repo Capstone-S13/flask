@@ -67,7 +67,9 @@ def get_customer_orders(customerId):
 def get_store_orders(storeId):
     orders = OrderDb.query.filter_by(storeId=storeId).all()
     customerNames = {}
+    print(orders)
     for order in orders:
+        print(order)
         userId = order.customerId
         if userId not in customerNames:
             newName = UserDb.query.filter_by(userId=userId).first().name

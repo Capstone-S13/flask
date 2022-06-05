@@ -40,28 +40,32 @@
                 
                 <div class="row">
                   {% for store in stores %}
-                  <div class="col mb-3">
-                    
+                    <div class="col-sm-6 mb-3">
                       <div class="card">
-                          <img src="https://static.wikia.nocookie.net/logopedia/images/c/c0/GrabFood_%282016%29.svg/revision/latest?cb=20210219083903" class="card-img-top" alt="...">
-                          <div class="card-body">
+                        <img src="https://static.wikia.nocookie.net/logopedia/images/c/c0/GrabFood_%282016%29.svg/revision/latest?cb=20210219083903" class="card-img-top" alt="...">
+                        <div class="card-body">
                           <h5 class="card-title text-color text-center">{{store.name}}</h5>
                           <a href="/customer/{{customerId}}/create/{{store.userId}}" class="btn btn-yellow btn-block">Buy here</a>
-                          </div>
+                        </div>
                       </div>
-                    
-                  </div>
-                {% endfor %} 
-              </div>
-              
-            </div>
+                    </div>
+                  {% endfor %}
+                </div>
           
           </div>
           
           <div role="tabpanel" class="tab-pane fade" id="delivery">
             <div class="container p-3">
               <div class="row">
-                {% include "cards/deliveryCard.html" %}
+                {% for order in delivery %}
+                <div class="card">
+                  <div class="card-body">
+                      <h5 class="card-title text-color">Order 1</h5>
+                      <p class="card-text text-color">Order From: {{storeNames[order.storeId]}}</p>
+                      <p class="card-text text-color">Status: {{order.status}}</p>
+                      <!-- <span class="card-text text-color">instructions here</span> -->
+                  </div>
+                  </div>
               </div>
             </div>
           </div>

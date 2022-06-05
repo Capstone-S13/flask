@@ -9,6 +9,13 @@
   <body>
     {% include "base.html" %}
     {% block content %}
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <p>{{message}}</p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
     <div class="container-nav">
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-yellow">
             <div class="fixed-width">
@@ -37,13 +44,13 @@
 
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade in active" id="incoming">
-            <div class="container">
+            <div class="container-fluid">
               <div class="row p-3">
                 {% for order in incoming %}
-                <div class="card">
+                <div class="card" style="width: 100%">
                   <div class="card-body">
-                      <h5 class="card-title text-color">Order Number: {{order.dateCreated}}</h5>
-                      <p class="card-text text-color">Customer Name: {{customerNames[order.customerId]}}</p>
+                      <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
+                      <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
                       <div class="row align-items-start">
                           <a href="/store/{{order.storeId}}/order/{{order.orderId}}/delete" class="m-1 btn col btn-outline-red">Reject Order</a>
                           <a href="#" class="m-1 btn col btn-outline-green">Accept Order</a>
@@ -65,6 +72,7 @@
                   <div class="card">
                   <div class="card-body">
                       <h5 class="card-title text-color">{{order}}</h5>
+                      <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
                       <p class="card-text text-color">Customer Name here</p>
                       <a href="#" class="m-1 btn col btn-outline-green">Ready for Robot</a>
                   </div>

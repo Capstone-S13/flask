@@ -81,12 +81,13 @@ def signup():
 @app.route('/customer/<string:userId>/landing', methods=['POST', 'GET'])
 def customerLandingPage(userId):
     stores = system.get_all_stores()
-    orders = system.get_customer_orders(userId)
-    print(orders)
+    storeNames, delivery = system.get_customer_orders(userId)
+    print(delivery)
     return render_template("customerLanding.html",
                            customerId=userId,
-                           stores=stores,
-                           orders=orders)
+                           stores = stores,
+                           storeNames=storeNames,
+                           delivery=delivery)
 
 # Customer Creating Order
 @app.route('/customer/<string:userId>/create/<string:storeId>')

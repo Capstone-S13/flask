@@ -88,8 +88,15 @@ def get_store_orders(storeId):
 
 def get_vendor_details(userId):
     #this should return the entire row
-    return UserDb.query.filter_by(accountType=STORE,
+    user =  UserDb.query.filter_by(accountType=STORE,
                                 userId=userId).all()
+    userDetails = {}
+    for details in user:
+        userId = details.userId
+        if userId not in userDetails:
+            newName = UserDb.query.filter_by(userId=userId).first().name
+            userDetails[userId] = newName
+    return userDetails
     
 def create_order(userId, storeId):
     orderId = uuid4()

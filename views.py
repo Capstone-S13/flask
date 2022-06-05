@@ -1,5 +1,5 @@
 from base import app
-from flask import Flask, render_template, url_for, request, redirect, Blueprint
+from flask import Flask, render_template, url_for, request, redirect, flash, Blueprint
 # from flask_login import LoginManager, login_user
 # from flask_login_multi.login_manager import LoginManager
 from datetime import datetime
@@ -82,6 +82,7 @@ def signup():
 def customerLandingPage(userId):
     stores = system.get_all_stores()
     orders = system.get_customer_orders(userId)
+    print(orders)
     return render_template("customerLanding.html",
                            customerId=userId,
                            stores=stores,
@@ -95,6 +96,7 @@ def create(userId, storeId):
         return "There was an error creating the order"
     else:
         print("ORDER CREATED!!")
+        # flash("order successfully created", 'info')
         return redirect("/customer/{}/landing".format(userId))
         
 
@@ -103,11 +105,13 @@ def create(userId, storeId):
 # def order(userId, orderId):
 #     order = system.get_order(userId, orderId)
 #     return render_template("order.html", order=order, userId=userId)
+
 # Customer Delete Order
 # look at delete_order in system
 @app.route('/customer/<string:userId>/order/<string:orderId>/delete')
 def delete(userId, orderId):
     deleteStatus = system.delete_order(userId, orderId)
+    # flash('order deleted', 'info')
     
     # if order_to_delete.customerId == userId:
     #     try:
@@ -135,7 +139,6 @@ def customerSettings(userId):
 @app.route('/store/<string:userId>/landing')
 def storeLandingPage(userId):
     customerNames, incoming, preparing, delivery = system.get_store_orders(userId)
-    # print(orders, incoming, preparing, delivery)
     print(customerNames)
     print(incoming)
     print(preparing)
@@ -198,8 +201,8 @@ def set_status(userId, orderId, status):
 @app.route('/store/<string:userId>/settings', methods=['POST', 'GET'])
 def storeSettings(userId):
     user = system.get_vendor_details(userId)
-    print(user)
-    return render_template("storeSettings.html", user=user)
+    print(user.keys())
+    return render_template("storeSettings.html", user=user, vendorId=userId)
 
 
 # Logout

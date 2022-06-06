@@ -61,8 +61,8 @@
                 <div class="col-sm-6 mb-3">
                   <div class="card">
                   <div class="card-body">
-                      <h5 class="card-title text-color">Order 1</h5>
-                      <p class="card-text text-color">Order From: {{storeNames[order.storeId]}}</p>
+                      <h5 class="card-title text-color">Order From: {{storeNames[order.storeId]}}</h5>
+                      <p class="card-text text-color">Date and time: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
                       <p class="card-text text-color">Status: {{order.status}}</p>
                       <!-- <span class="card-text text-color">instructions here</span> -->
                   </div>

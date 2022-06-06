@@ -43,7 +43,7 @@ def storeLandingPage():
 @login_required
 def order(orderId):
     if request.method == "POST":
-        print(request.form['order_button'])
+        print(request.form["order_button"])
         updateStatus = system.set_order_status(current_user.id, orderId, int(request.form['order_button']))
         print(updateStatus)
         if updateStatus == "success":
@@ -65,10 +65,16 @@ def order(orderId):
 @STORE_BLUEPRINT.route('/settings', methods=['GET', 'POST'])
 @login_required
 def storeSettings():
-    user = system.get_vendor_details(current_user.id)
     
     if request.method == 'POST':
-        # do something
-        pass    
-    
-    return render_template("storeSettings.html", user=user, vendorId=current_user.id)
+        userUpdateStatus = system.update_user(current_user.id,
+                                                request.form["name"],
+                                                request.form["email"],
+                                                request.form["buildingName"],
+                                                request.form["unitNumber"])
+        if userUpdateStatus:
+            print("Details Updated")
+            return redirect("/store/landing")
+        print("error updating user details")
+        return render_template("storeSettings.html", user=current_user)
+    return render_template("storeSettings.html", user=current_user)

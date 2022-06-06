@@ -85,4 +85,4 @@ def create(storeId):
 @CUSTOMER_BLUEPRINT.route('/settings', methods=['POST', 'GET'])
 @login_required
 def customerSettings():
-    return render_template("customerSettings.html")
+    return render_template("customerSettings.html", user=current_user)

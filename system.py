@@ -100,7 +100,7 @@ def get_vendor_details(userId):
                                 id=userId).all()
     userDetails = {}
     for details in user:
-        userId = details.userId
+        userId = details.id
         if userId not in userDetails:
             newName = UserDb.query.filter_by(id=userId).first().name
             userDetails[userId] = newName
@@ -149,3 +149,17 @@ def set_order_status(storeId, orderId, status):
             print(e)
             return False
     return False
+
+def update_user(userId, name, email, buildingName, unitNumber):
+    user_to_update = UserDb.query.get_or_404(userId)
+    
+    try:
+        user_to_update.name = name
+        user_to_update.email = email
+        user_to_update.buildingName = buildingName
+        user_to_update.unitNumber = unitNumber
+        db.session.commit()
+        return True
+    except Exception as e:
+        print(e)
+        return False

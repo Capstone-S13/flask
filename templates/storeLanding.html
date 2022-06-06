@@ -30,7 +30,7 @@
           
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
               <a class="dropdown-item" href="/store/{{storeId}}/settings">Settings</a>
-              <a class="dropdown-item" href="/">Logout</a>
+              <a class="dropdown-item" href="/logout">Logout</a>
             </div>
           </div>
           
@@ -51,7 +51,7 @@
                   <div class="card-body">
                     <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
                     <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
-                    <form action="/store/{{order.storeId}}/order/{{order.orderId}}" method="POST" class="row align-items-start">
+                    <form action="/store/order/{{order.orderId}}" method="POST" class="row align-items-start">
                       <button name="order_button" value="8" class="m-1 btn col btn-outline-red">Reject Order</button>
                       <button name="order_button" value="1" class="m-1 btn col btn-outline-green">Accept Order</button>
                     </form>
@@ -73,7 +73,7 @@
                     <h5 class="card-title text-color">{{order}}</h5>
                     <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
                     <p class="card-text text-color">Customer Name here</p>
-                    <form action="/store/{{order.storeId}}/order/{{order.orderId}}" method="POST" class="row align-items-start">
+                    <form action="/store/order/{{order.orderId}}" method="POST" class="row align-items-start">
                       <button name="order_button" value="2" class="m-1 btn col btn-outline-green">Ready for Robot</button>
                     </form>
                   </div>

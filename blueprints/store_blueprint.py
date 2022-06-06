@@ -1,7 +1,6 @@
 # from base import app
 from flask import Flask, render_template, url_for, request, redirect, flash, Blueprint
-# from flask_login import LoginManager, login_user
-# from flask_login_multi.login_manager import LoginManager
+from flask_login import login_required, current_user
 from datetime import datetime
 import system
 
@@ -24,70 +23,52 @@ FAILED = 9
 STORE_BLUEPRINT = Blueprint('store_blueprint', __name__)
 
 # Store Landing Page
-@STORE_BLUEPRINT.route('/<string:userId>/landing')
-def storeLandingPage(userId):
-    customerNames, incoming, preparing, delivery = system.get_store_orders(userId)
+@STORE_BLUEPRINT.route('/landing')
+@login_required
+def storeLandingPage():
+    customerNames, incoming, preparing, delivery = system.get_store_orders(current_user.id)
     print(customerNames)
     print(incoming)
     print(preparing)
+    print(delivery)
     return render_template("storeLanding.html",
-                           storeId=userId,
+                           storeId=current_user.id,
                            customerNames = customerNames,
                            incoming=incoming,
                            preparing=preparing,
                            delivery=delivery)
 
 # Store Update Order Status
-@STORE_BLUEPRINT.route('/<string:userId>/order/<string:orderId>', methods=['POST', 'GET'])
-def order(userId, orderId):
-    
+@STORE_BLUEPRINT.route('/order/<string:orderId>', methods=['GET', 'POST'])
+@login_required
+def order(orderId):
     if request.method == "POST":
         print(request.form['order_button'])
-        updateStatus = system.set_order_status(userId, orderId, int(request.form['order_button']))
+        updateStatus = system.set_order_status(current_user.id, orderId, int(request.form['order_button']))
         print(updateStatus)
         if updateStatus == "success":
             print("ORDER UPDATED!!")
-            return redirect("/{}/landing".format(userId))
+            return redirect("/store/landing")
     print("There was an error updating order status")
-    return redirect("/{}/landing".format(userId))
+    return redirect("/store/landing")
 
 
 # Store Viewing Single Order Page
-# @STORE_BLUEPRINT.route(/<string:userId>/order/<string:orderId>', methods=['POST', 'GET'])
-# def order(userId, orderId):
-#     order = system.get_order(userId, orderId)
-#     return render_template("order.html", order=order, userId=userId)
-########################### Create Order HTML #########################################
+# @STORE_BLUEPRINT.route(/<string:current_user.id>/order/<string:orderId>', methods=['POST', 'GET'])
+# @login_required
+# def order(orderId):
+#     order = system.get_order(current_user.id, orderId)
+#     return render_template("order.html", order=order, current_user.id=current_user.id)
 
-# Store Reject Order
-# @STORE_BLUEPRINT.route('/<string:userId>/order/<string:orderId>/delete')
-# def reject(userId, orderId):
-#     deleteStatus = system.delete_order(userId, orderId)
-    
-    # if order_to_delete.storeId == userId:
-    #     try:
-    #         OrderDb.session.delete(order_to_delete)
-    #         OrderDb.session.commit()
-    #         return redirect("/{}/landing".format(userId))
-    #     except:
-    #         return "There was an error deleting the order"
-    # else:
-    #     return "Order does not belong to user"
-    # return render_template("storeLanding.html")
-
-# Update Order (Status)
-@STORE_BLUEPRINT.route('/<string:userId>/order/<string:orderId>/<int:status>')
-def set_status(userId, orderId, status):
-    statusUpdateStatus = system.set_order_status(userId, orderId, status)
-    
-    if statusUpdateStatus == "success":
-        return redirect('/{}/landing'.format(userId))
-    else:
-        return statusUpdateStatus
 
 # Vendor Settings Page
-@STORE_BLUEPRINT.route('/<string:userId>/settings', methods=['POST', 'GET'])
-def storeSettings(userId):
-    user = system.get_vendor_details(userId)
-    print(user.keys())
-    return render_template("storeSettings.html", user=user, vendorId=userId)
+@STORE_BLUEPRINT.route('/settings', methods=['GET', 'POST'])
+@login_required
+def storeSettings():
+    user = system.get_vendor_details(current_user.id)
+    
+    if request.method == 'POST':
+        # do something
+        pass    
+    
+    return render_template("storeSettings.html", user=user, vendorId=current_user.id)

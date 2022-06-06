@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, Blueprint
-# from flask_login import LoginManager, login_user
+from flask_login import login_user, login_required, logout_user
 # from flask_login_multi.login_manager import LoginManager
 from datetime import datetime
 import system
@@ -23,29 +23,34 @@ FAILED = 9
 LOGIN_BLUEPRINT = Blueprint('login_blueprint', __name__)
 
 # Login Page
-@LOGIN_BLUEPRINT.route('/', methods = ['GET', 'POST'])
+@LOGIN_BLUEPRINT.route('/')
 def login():
+    
+    return render_template('login.html')
+
+@LOGIN_BLUEPRINT.route('/', methods=['POST'])
+def login_post():
     error = None
     if request.method == 'POST':
-        loginApprove, userId, accType = system.check_login(request.form['email'], request.form['password'])
+        loginApprove, user = system.check_login(request.form['email'], request.form['password'])
 
         if loginApprove == "approved":
-            # check account type (customer or store)
-            # push to different home pages
-            # cache details somewhere?
-            # login_user(UserDb)
-            if accType == CUSTOMER:
-                return redirect('/customer/{}/landing'.format(userId))
+            login_user(user)
+            if user.accountType == CUSTOMER:
+                return redirect('/customer/landing')
             else:
-                return redirect('/store/{}/landing'.format(userId))
+                return redirect('/store/landing')
         else:
-            error = loginApprove
-            
-    return render_template('login.html', error=error)
-
+            return redirect('/')
+        
 # Sign Up Page
-@LOGIN_BLUEPRINT.route('/signup', methods=['GET', 'POST'])
+@LOGIN_BLUEPRINT.route('/signup')
 def signup():
+    
+    return render_template('signup.html')
+
+@LOGIN_BLUEPRINT.route('/signup', methods=['POST'])
+def signup_post():
     if request.method == 'POST':
         create_status = system.create_acc(request.form['name'], 
                                           request.form['email'], 
@@ -53,6 +58,12 @@ def signup():
                                           request.form['accType'])
         if create_status:
             return redirect('/')
-        else:
-            return render_template('signup.html')
-    return render_template('signup.html')
+        
+        print(create_status)
+        return render_template('signup.html')
+        
+@LOGIN_BLUEPRINT.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')

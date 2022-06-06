@@ -1,5 +1,5 @@
 from sqlalchemy import true
-# from base import app
+from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, UserDb, OrderDb, IngressDb
 from uuid import uuid4
 
@@ -30,26 +30,34 @@ FAILED = 9
 
 def check_login(email, password):
     userAcc = UserDb.query.filter_by(email=email).first()
-    if password != userAcc.password:
-        return "invalid password", None, None
+    
+    if not userAcc or not check_password_hash(userAcc.password, password):
+        return "invalid login", None
+
     else:
-        return "approved", userAcc.userId, userAcc.accountType
+        return "approved", userAcc
+
+def get_user(userId):
+    return UserDb.query.get_or_404(userId)
 
 # ADD LOGIC TO CHECK FOR DUPLICATE EMAIL
 def create_acc(newName, newEmail, newPassword, accType):
+    user = UserDb.query.filter_by(email=newEmail).first()
+    if user:
+        return "User already exist!"
+    
     uuid = uuid4()
-    new_acc = UserDb(userId = str(uuid),
+    new_acc = UserDb(id = str(uuid),
                      email = newEmail,
                      name = newName,
-                     password = newPassword,
+                     password = generate_password_hash(newPassword, method='sha256'), # password hashing
                      accountType = int(accType))
     try:
         db.session.add(new_acc)
         db.session.commit()
         return True
     except Exception as e:
-        print(e)
-        return False
+        return e
     
 def get_all_stores():
     return UserDb.query.filter_by(accountType=STORE).all()
@@ -60,7 +68,7 @@ def get_customer_orders(customerId):
     for order in orders:
         userId = order.storeId
         if userId not in storeNames:
-            newName = UserDb.query.filter_by(userId=userId).first().name
+            newName = UserDb.query.filter_by(id=userId).first().name
             storeNames[userId] = newName
     return storeNames, orders
 
@@ -72,7 +80,7 @@ def get_store_orders(storeId):
         print(order)
         userId = order.customerId
         if userId not in customerNames:
-            newName = UserDb.query.filter_by(userId=userId).first().name
+            newName = UserDb.query.filter_by(id=userId).first().name
             customerNames[userId] = newName
     incoming = OrderDb.query.filter_by(storeId=storeId,
                                       status=ORDER_SENT).all()
@@ -89,12 +97,12 @@ def get_store_orders(storeId):
 def get_vendor_details(userId):
     #this should return the entire row
     user =  UserDb.query.filter_by(accountType=STORE,
-                                userId=userId).all()
+                                id=userId).all()
     userDetails = {}
     for details in user:
         userId = details.userId
         if userId not in userDetails:
-            newName = UserDb.query.filter_by(userId=userId).first().name
+            newName = UserDb.query.filter_by(id=userId).first().name
             userDetails[userId] = newName
     return userDetails
     

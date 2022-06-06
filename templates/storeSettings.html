@@ -29,7 +29,7 @@
           
           
         </nav>
-        <div class="container p-3">
+        <div class="container p-3 text-color">
           <form action="/store/settings" method="post" class="form-store-settings">
             <h4>Account Settings</h4>
             <div class="form-group text-left">
@@ -44,6 +44,23 @@
               value="{{request.form.address }}">
             </div>
     
+            <div class="row mb-4">
+              <div class="col">
+                <div class="form-outline">
+                  <label for="inputPostalCode">Postal Code</label>
+                  <input type="text" id="inputPostalCode" class="form-control" placeholder="{{user.buildingName}}" name="postalCode" 
+                  value="{{request.form.postalCode }}">
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-outline">
+                  <label for="inputUnit">Unit Number</label>
+                  <input type="text" id="inputUnit" class="form-control" placeholder="{{user.buildingName}}" name="unit" 
+                  value="{{request.form.unit }}">
+                </div>
+              </div>
+            </div>
+
             <div class="form-group text-left">
               <label for="inputEmail">Email address</label>
               <input type="email" id="inputEmail" class="form-control" placeholder="{{user.email}}" name="email" 

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, Blueprint
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-import system
+import system as system
 
 # Account Type
 CUSTOMER = 0

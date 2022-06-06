@@ -1,5 +1,5 @@
 from sqlalchemy import true
-from base import app
+# from base import app
 from models import db, UserDb, OrderDb, IngressDb
 from uuid import uuid4
 

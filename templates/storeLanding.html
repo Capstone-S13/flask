@@ -47,7 +47,7 @@
             <div class="container-fluid">
               <div class="row p-3">
                 {% for order in incoming %}
-                <div class="card" style="width: 100%">
+                <div class="card mb-3" style="width: 100%">
                   <div class="card-body">
                     <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
                     <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
@@ -70,11 +70,11 @@
                 <div class="col-sm-6 mb-3">
                   <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title text-color">{{order}}</h5>
+                    <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
                     <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
-                    <p class="card-text text-color">Customer Name here</p>
+                    <p class="card-text text-color">Status: {{order.status}}</p>
                     <form action="/store/order/{{order.orderId}}" method="POST" class="row align-items-start">
-                      <button name="order_button" value="2" class="m-1 btn col btn-outline-green">Ready for Robot</button>
+                      <button name="order_button" value="3" class="m-1 btn col btn-outline-green">Ready for Robot</button>
                     </form>
                   </div>
                   </div>
@@ -91,9 +91,8 @@
                 <div class="col-sm-6 mb-3">
                   <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title text-color">{{order}}</h5>
-                    <p class="card-text text-color">Customer Name here</p>
-                    <p class="card-text text-color">Status:</p>
+                    <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
+                    <p class="card-text text-color">Status: {{order.status}}</p>
                     <span class="card-text text-color">instructions here</span>
                   </div>
                   </div>

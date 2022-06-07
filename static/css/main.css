@@ -87,11 +87,13 @@
 .btn-outline-red {
     color: var(--title-color);
     border-color: var(--title-color) !important;
+    background-color: #FFF !important;
 }
 
 .btn-outline-green {
     color: var(--success-color);
     border-color: var(--success-color) !important;
+    background-color: #FFF !important;
 }
 
 .btn-yellow {

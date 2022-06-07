@@ -7,7 +7,7 @@ from blueprints.customer_blueprint import CUSTOMER_BLUEPRINT
 from blueprints.store_blueprint import STORE_BLUEPRINT
 
 from models import db, dbBind
-import system
+import system as system
 
 app = Flask(__name__)
 

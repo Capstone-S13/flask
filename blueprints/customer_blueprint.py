@@ -22,7 +22,7 @@ FAILED = 9
 CUSTOMER_BLUEPRINT = Blueprint('customer_blueprint', __name__)
 
 # Customer Landing Page
-@CUSTOMER_BLUEPRINT.route('/landing')
+@CUSTOMER_BLUEPRINT.route('/landing', methods=['GET'])
 @login_required
 def customerLandingPage():
     stores = system.get_all_stores()
@@ -82,7 +82,7 @@ def create(storeId):
 # @login_required
 
 # Customer Settings Page
-@CUSTOMER_BLUEPRINT.route('/settings', methods=['POST', 'GET'])
+@CUSTOMER_BLUEPRINT.route('/settings', methods=['GET', 'POST'])
 @login_required
 def customerSettings():
     return render_template("customerSettings.html", user=current_user)

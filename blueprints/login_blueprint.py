@@ -1,6 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect, flash, Blueprint
 from flask_login import login_user, login_required, logout_user
-# from flask_login_multi.login_manager import LoginManager
 from datetime import datetime
 import system
 

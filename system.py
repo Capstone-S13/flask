@@ -37,8 +37,8 @@ def check_login(email, password):
     else:
         return "approved", userAcc
 
-def get_user(userId):
-    return UserDb.query.get_or_404(userId)
+def get_user(id):
+    return UserDb.query.get_or_404(id)
 
 # ADD LOGIC TO CHECK FOR DUPLICATE EMAIL
 def create_acc(newName, newEmail, newPassword, accType):
@@ -66,10 +66,10 @@ def get_customer_orders(customerId):
     orders = OrderDb.query.filter_by(customerId=customerId).all()
     storeNames = {}
     for order in orders:
-        userId = order.storeId
-        if userId not in storeNames:
-            newName = UserDb.query.filter_by(id=userId).first().name
-            storeNames[userId] = newName
+        id = order.storeId
+        if id not in storeNames:
+            newName = UserDb.query.filter_by(id=id).first().name
+            storeNames[id] = newName
     return storeNames, orders
 
 def get_store_orders(storeId):
@@ -78,10 +78,10 @@ def get_store_orders(storeId):
     print(orders)
     for order in orders:
         print(order)
-        userId = order.customerId
-        if userId not in customerNames:
-            newName = UserDb.query.filter_by(id=userId).first().name
-            customerNames[userId] = newName
+        id = order.customerId
+        if id not in customerNames:
+            newName = UserDb.query.filter_by(id=id).first().name
+            customerNames[id] = newName
     incoming = OrderDb.query.filter_by(storeId=storeId,
                                       status=ORDER_SENT).all()
     preparing = OrderDb.query.filter_by(storeId=storeId,
@@ -94,22 +94,22 @@ def get_store_orders(storeId):
                                             ARRIVED).all()
     return customerNames, incoming, preparing, delivery
 
-def get_vendor_details(userId):
+def get_vendor_details(id):
     #this should return the entire row
     user =  UserDb.query.filter_by(accountType=STORE,
-                                id=userId).all()
+                                id=id).all()
     userDetails = {}
     for details in user:
-        userId = details.id
-        if userId not in userDetails:
-            newName = UserDb.query.filter_by(id=userId).first().name
-            userDetails[userId] = newName
+        id = details.id
+        if id not in userDetails:
+            newName = UserDb.query.filter_by(id=id).first().name
+            userDetails[id] = newName
     return userDetails
     
-def create_order(userId, storeId):
+def create_order(id, storeId):
     orderId = uuid4()
     new_order = OrderDb(orderId=str(orderId),
-                        customerId=userId,
+                        customerId=id,
                         storeId=storeId,
                         orderDetails="Something Cool",
                         status=ORDER_SENT)
@@ -125,9 +125,9 @@ def get_order(orderId):
     return OrderDb.query.get_or_404(orderId)
 
 # change order status first then when the other party acknowlege then delete?
-def delete_order(userId, orderId):
+def delete_order(id, orderId):
     order_to_delete = OrderDb.query.get_or_404(orderId)
-    if order_to_delete.storeId == userId:
+    if order_to_delete.storeId == id:
         try:
             db.session.delete(order_to_delete)
             db.session.commit()
@@ -150,8 +150,8 @@ def set_order_status(storeId, orderId, status):
             return False
     return False
 
-def update_user(userId, name, email, buildingName, unitNumber):
-    user_to_update = UserDb.query.get_or_404(userId)
+def update_user(id, name, email, buildingName, unitNumber):
+    user_to_update = UserDb.query.get_or_404(id)
     
     try:
         user_to_update.name = name

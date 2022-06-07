@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
 from blueprints.login_blueprint import LOGIN_BLUEPRINT
-from blueprints.signup_blueprint import SIGNUP_BLUEPRINT
 from blueprints.customer_blueprint import CUSTOMER_BLUEPRINT
 from blueprints.store_blueprint import STORE_BLUEPRINT
 
@@ -29,7 +28,6 @@ def load_user(userId):
     return system.get_user(userId)
 
 app.register_blueprint(LOGIN_BLUEPRINT)
-app.register_blueprint(SIGNUP_BLUEPRINT)
 app.register_blueprint(CUSTOMER_BLUEPRINT, url_prefix='/customer')
 app.register_blueprint(STORE_BLUEPRINT, url_prefix='/store')
 

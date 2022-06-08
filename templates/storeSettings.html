@@ -12,7 +12,7 @@
     <div class="container-nav">
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-yellow">
             <div class="fixed-width">
-                <a class="nav-icon orange col" href="/store/{{storeId}}/landing">Shop Owner</a>
+                <a class="nav-icon orange col" href="/store/landing">Shop Owner</a>
                 <span class="orange col">Store Settings</span>
             </div>
           
@@ -23,7 +23,7 @@
           
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
               <a class="dropdown-item" href="#">Settings</a>
-              <a class="dropdown-item" href="/">Logout</a>
+              <a class="dropdown-item" href="/logout">Logout</a>
             </div>
           </div>
           
@@ -37,25 +37,19 @@
               <input type="text" id="inputAccount" class="form-control" placeholder="{{user.name}}" name="name" 
               value="{{request.form.name }}">
             </div>
-
-            <div class="form-group text-left">
-              <label for="inputAddress">Store Address</label>
-              <input type="text" id="inputAddress" class="form-control" placeholder="{{user.buildingName}}" name="address" 
-              value="{{request.form.address }}">
-            </div>
     
             <div class="row mb-4">
               <div class="col">
                 <div class="form-outline">
                   <label for="inputPostalCode">Postal Code</label>
-                  <input type="text" id="inputPostalCode" class="form-control" placeholder="{{user.buildingName}}" name="postalCode" 
+                  <input type="text" id="inputPostalCode" class="form-control" placeholder="{{user.postalCode}}" name="postalCode" 
                   value="{{request.form.postalCode }}">
                 </div>
               </div>
               <div class="col">
                 <div class="form-outline">
                   <label for="inputUnit">Unit Number</label>
-                  <input type="text" id="inputUnit" class="form-control" placeholder="{{user.buildingName}}" name="unit" 
+                  <input type="text" id="inputUnit" class="form-control" placeholder="{{user.unitNumber}}" name="unit" 
                   value="{{request.form.unit }}">
                 </div>
               </div>

@@ -8,16 +8,16 @@ CUSTOMER = 0
 STORE = 1
 
 # Order Statuses
-ORDER_SENT = 0
-ORDER_RECEIVED = 1
-ROBOT_DISPATCHED = 2
-AT_STORE_HUB = 3
-BETWEEN_HUBS = 4
-AT_DEST_HUB = 5
-ARRIVED = 6
-DELIVERED = 7
-CANCELLED = 8
-FAILED = 9
+ORDER_SENT = "Order Sent"
+ORDER_RECEIVED = "Order Received"
+ROBOT_DISPATCHED = "Robot Dispatched"
+AT_STORE_HUB = "At Store Hub"
+BETWEEN_HUBS = "Between Hubs"
+AT_DEST_HUB = "At Destination Hub"
+ARRIVED = "Arrived"
+DELIVERED = "Delivered"
+CANCELLED = "Cancelled"
+FAILED = "Failed"
 
 CUSTOMER_BLUEPRINT = Blueprint('customer_blueprint', __name__)
 

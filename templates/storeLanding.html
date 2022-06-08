@@ -19,7 +19,7 @@
     <div class="container-nav">
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-yellow">
             <div class="fixed-width">
-                <a class="nav-icon orange col" href="#">Shop Owner</a>
+                <a class="nav-icon orange col" href="/store/landing">Shop Owner</a>
                 <span class="orange col">View all orders and their status</span>
             </div>
           
@@ -53,7 +53,7 @@
                     <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
                     <form action="/store/order/{{order.orderId}}" method="POST" class="row align-items-start">
                       <button name="order_button" value="8" class="m-1 btn col btn-outline-red">Reject Order</button>
-                      <button name="order_button" value="1" class="m-1 btn col btn-outline-green">Accept Order</button>
+                      <button name="order_button" value="Order Received" class="m-1 btn col btn-outline-green">Accept Order</button>
                     </form>
                   </div>
                   </div>
@@ -74,7 +74,7 @@
                     <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
                     <p class="card-text text-color">Status: {{order.status}}</p>
                     <form action="/store/order/{{order.orderId}}" method="POST" class="row align-items-start">
-                      <button name="order_button" value="3" class="m-1 btn col btn-outline-green">Ready for Robot</button>
+                      <button name="order_button" value="Robot Dispatched" class="m-1 btn col btn-outline-green">Ready for Robot</button>
                     </form>
                   </div>
                   </div>

@@ -17,16 +17,16 @@ STORE_PREPARING = 1
 STORE_DELIVERY = 2
 
 # Order Statuses
-ORDER_SENT = 0
-ORDER_RECEIVED = 1
-ROBOT_DISPATCHED = 2
-AT_STORE_HUB = 3
-BETWEEN_HUBS = 4
-AT_DEST_HUB = 5
-ARRIVED = 6
-DELIVERED = 7
-CANCELLED = 8
-FAILED = 9
+ORDER_SENT = "Order Sent"
+ORDER_RECEIVED = "Order Received"
+ROBOT_DISPATCHED = "Robot Dispatched"
+AT_STORE_HUB = "At Store Hub"
+BETWEEN_HUBS = "Between Hubs"
+AT_DEST_HUB = "At Destination Hub"
+ARRIVED = "Arrived"
+DELIVERED = "Delivered"
+CANCELLED = "Cancelled"
+FAILED = "Failed"
 
 def check_login(email, password):
     userAcc = UserDb.query.filter_by(email=email).first()
@@ -41,7 +41,7 @@ def get_user(id):
     return UserDb.query.get_or_404(id)
 
 # ADD LOGIC TO CHECK FOR DUPLICATE EMAIL
-def create_acc(newName, newEmail, newPassword, accType):
+def create_acc(newName, newEmail, newPassword, newPostalCode, newUnitNumber, accType):
     user = UserDb.query.filter_by(email=newEmail).first()
     if user:
         return "User already exist!"
@@ -51,6 +51,8 @@ def create_acc(newName, newEmail, newPassword, accType):
                      email = newEmail,
                      name = newName,
                      password = generate_password_hash(newPassword, method='sha256'), # password hashing
+                     postalCode = newPostalCode,
+                     unitNumber = newUnitNumber,
                      accountType = int(accType))
     try:
         db.session.add(new_acc)
@@ -85,10 +87,10 @@ def get_store_orders(storeId):
     incoming = OrderDb.query.filter_by(storeId=storeId,
                                       status=ORDER_SENT).all()
     preparing = OrderDb.query.filter_by(storeId=storeId,
-                                       status=ORDER_RECEIVED or
-                                            ROBOT_DISPATCHED).all()
+                                       status=ORDER_RECEIVED).all()
     delivery = OrderDb.query.filter_by(storeId=storeId,
-                                      status=AT_STORE_HUB or
+                                      status=ROBOT_DISPATCHED or 
+                                            AT_STORE_HUB or
                                             BETWEEN_HUBS or
                                             AT_DEST_HUB or
                                             ARRIVED).all()
@@ -150,13 +152,13 @@ def set_order_status(storeId, orderId, status):
             return False
     return False
 
-def update_user(id, name, email, buildingName, unitNumber):
+def update_user(id, name, email, postalCode, unitNumber):
     user_to_update = UserDb.query.get_or_404(id)
     
     try:
         user_to_update.name = name
         user_to_update.email = email
-        user_to_update.buildingName = buildingName
+        user_to_update.postalCode = postalCode
         user_to_update.unitNumber = unitNumber
         db.session.commit()
         return True

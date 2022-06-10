@@ -65,7 +65,6 @@ def order(orderId):
 @STORE_BLUEPRINT.route('/settings', methods=['GET', 'POST'])
 @login_required
 def storeSettings():
-    
     if request.method == 'POST':
         userUpdateStatus = system.update_user(current_user.id,
                                                 request.form["name"],

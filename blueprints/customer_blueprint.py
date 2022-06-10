@@ -85,4 +85,15 @@ def create(storeId):
 @CUSTOMER_BLUEPRINT.route('/settings', methods=['GET', 'POST'])
 @login_required
 def customerSettings():
+    if request.method == 'POST':
+        userUpdateStatus = system.update_user(current_user.id,
+                                                request.form["name"],
+                                                request.form["email"],
+                                                request.form["postalCode"],
+                                                request.form["unit"])
+        if userUpdateStatus:
+            print("Details Updated")
+            return redirect("/customer/landing")
+        print("error updating user details")
+        return render_template("customerSettings.html", user=current_user)
     return render_template("customerSettings.html", user=current_user)

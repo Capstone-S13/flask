@@ -35,6 +35,6 @@ def create_app(config_filename=None):
     app.register_blueprint(STORE_BLUEPRINT, url_prefix='/store')
     return app
 
-if __name__== "__main__":
-    app = create_app()
-    app.run(debug=True)
+# if __name__== "__main__":
+#     app = create_app('flask.cfg')
+#     app.run(debug=True)

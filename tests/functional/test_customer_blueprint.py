@@ -1,6 +1,5 @@
 def test_landing_page(test_client, init_database):
     response = test_client.get('/customer/landing',
-                               current_user=user,
                                follow_redirects=True)
     assert response.status_code == 200
     # assert b'Please login' in response.data

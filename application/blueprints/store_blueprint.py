@@ -27,10 +27,10 @@ STORE_BLUEPRINT = Blueprint('store_blueprint', __name__)
 @login_required
 def storeLandingPage():
     customerNames, incoming, preparing, delivery = system.get_store_orders(current_user.id)
-    print(customerNames)
-    print(incoming)
-    print(preparing)
-    print(delivery)
+    # print(customerNames)
+    # print(incoming)
+    # print(preparing)
+    # print(delivery)
     return render_template("storeLanding.html",
                            storeId=current_user.id,
                            customerNames = customerNames,

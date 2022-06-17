@@ -2,7 +2,6 @@ import pytest
 from application import create_app, db
 from application.models import UserDb, OrderDb, IngressDb
 from werkzeug.security import generate_password_hash
-from uuid import uuid4
 from datetime import datetime
 from flask_login import login_user, logout_user, login_manager
 

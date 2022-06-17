@@ -1,4 +1,4 @@
-from application import create_app
+from application import create_app, db
 
 if __name__== "__main__":
     app = create_app('flask.cfg')

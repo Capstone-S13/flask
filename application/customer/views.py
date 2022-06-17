@@ -1,6 +1,6 @@
-from flask import Flask, render_template, url_for, request, redirect, flash, Blueprint
+from . import CUSTOMER_BLUEPRINT
+from flask import render_template, url_for, request, redirect, flash
 from flask_login import login_required, current_user
-from datetime import datetime
 import application.system as system
 
 # Account Type
@@ -19,15 +19,14 @@ DELIVERED = "Delivered"
 CANCELLED = "Cancelled"
 FAILED = "Failed"
 
-CUSTOMER_BLUEPRINT = Blueprint('customer_blueprint', __name__)
-
 # Customer Landing Page
 @CUSTOMER_BLUEPRINT.route('/landing', methods=['GET'])
 @login_required
 def customerLandingPage():
     stores = system.get_all_stores()
     storeNames, delivery = system.get_customer_orders(current_user.id)
-    return render_template("customerLanding.html",
+    print(delivery)
+    return render_template("customer/customerLanding.html",
                            customerId=current_user.id,
                            stores = stores,
                            storeNames=storeNames,
@@ -37,12 +36,13 @@ def customerLandingPage():
 @CUSTOMER_BLUEPRINT.route('/create/<string:storeId>')
 @login_required
 def create(storeId):
-    status = system.create_order(current_user.id, storeId)
-    if status:
+    error = system.create_order(current_user.id, storeId)
+    if error:
+        return "There was an error creating the order"
+    else:
         print("ORDER CREATED!!")
         # flash("order successfully created", 'info')
-        return redirect("/customer/landing") 
-    return "There was an error creating the order"
+        return redirect("/customer/landing")
         
 
 # Customer Viewing Single Order
@@ -84,14 +84,14 @@ def create(storeId):
 @login_required
 def customerSettings():
     if request.method == 'POST':
-        userUpdateStatus = system.update_user(current_user.id,
-                                                request.form["name"],
-                                                request.form["email"],
-                                                request.form["postalCode"],
-                                                request.form["unit"])
-        if userUpdateStatus:
-            print("Details Updated")
-            return redirect("/customer/landing")
-        print("error updating user details")
-        return render_template("customerSettings.html", user=current_user)
-    return render_template("customerSettings.html", user=current_user)
+        error = system.update_user(current_user.id,
+                                    request.form["name"],
+                                    request.form["email"],
+                                    request.form["postalCode"],
+                                    request.form["unit"])
+        if error:
+            print("error updating user details")
+            return render_template("customer/customerSettings.html", user=current_user)
+        print("Details Updated")
+        return redirect("/customer/landing")
+    return render_template("customer/customerSettings.html", user=current_user)

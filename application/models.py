@@ -5,8 +5,8 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
-# dbBind = {'order': 'sqlite:///database/order.db',
-#           'ingress': 'sqlite:///database/ingress.db'}
+dbBind = {'order': 'sqlite:///database/order.db',
+          'ingress': 'sqlite:///database/ingress.db'}
 
 class UserDb(UserMixin, db.Model):
     id = db.Column(db.String(50), primary_key=True)
@@ -29,7 +29,7 @@ class OrderDb(db.Model):
 
 class IngressDb(db.Model):
     __bind_key__ = 'ingress'
-    postalCode = db.Column(db.String(50), primary_key=True)
+    postalCode = db.Column(db.Integer, primary_key=True)
     ingressPoint = db.Column(db.String(200), nullable=False)
     
 # db.create_all()

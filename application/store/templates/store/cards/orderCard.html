@@ -1,0 +1,27 @@
+<html>
+    <body>
+        {% block orderCard %}
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card">
+                        <img src="https://static.wikia.nocookie.net/logopedia/images/c/c0/GrabFood_%282016%29.svg/revision/latest?cb=20210219083903" class="card-img-top" alt="...">
+                        <div class="card-body">
+                        <h5 class="card-title text-color text-center">Shop 1</h5>
+                        <a href="#" class="btn btn-yellow btn-block">Buy here</a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+        
+        
+            {% for order in orders %}
+            
+            {% endfor %}
+        {% endblock orderCard %}
+    </body>
+
+</html>

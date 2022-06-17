@@ -28,28 +28,6 @@ DELIVERED = "Delivered"
 CANCELLED = "Cancelled"
 FAILED = "Failed"
 
-########################### USER DB ###########################
-def create_acc(newName, newEmail, newPassword, newPostalCode, newUnitNumber, accType):
-    user = UserDb.query.filter_by(email=newEmail).first()
-    if user:
-        return False
-    
-    uuid = uuid4()
-    new_acc = UserDb(id = str(uuid),
-                     email = newEmail,
-                     name = newName,
-                     password = generate_password_hash(newPassword, method='sha256'), # password hashing
-                     postalCode = newPostalCode,
-                     unitNumber = newUnitNumber,
-                     accountType = int(accType))
-    try:
-        db.session.add(new_acc)
-        db.session.commit()
-        return True
-    except Exception as e:
-        print(e)
-        return False
-
 def check_login(email, password):
     userAcc = UserDb.query.filter_by(email=email).first()
     
@@ -62,39 +40,30 @@ def check_login(email, password):
 def get_user(id):
     return UserDb.query.get_or_404(id)
 
+# ADD LOGIC TO CHECK FOR DUPLICATE EMAIL
+def create_acc(newName, newEmail, newPassword, newPostalCode, newUnitNumber, accType):
+    user = UserDb.query.filter_by(email=newEmail).first()
+    if user:
+        return "User already exist!"
+    
+    uuid = uuid4()
+    new_acc = UserDb(id = str(uuid),
+                     email = newEmail,
+                     name = newName,
+                     password = generate_password_hash(newPassword, method='sha256'), # password hashing
+                     postalCode = newPostalCode,
+                     unitNumber = newUnitNumber,
+                     accountType = int(accType))
+    try:
+        db.session.add(new_acc)
+        db.session.commit()
+        return False
+    except Exception as e:
+        print(e)
+        return e
+    
 def get_all_stores():
     return UserDb.query.filter_by(accountType=STORE).all()
-
-def update_user(id, name, email, postalCode, unitNumber):
-    user_to_update = UserDb.query.get_or_404(id)
-    
-    try:
-        user_to_update.name = name
-        user_to_update.email = email
-        user_to_update.postalCode = postalCode
-        user_to_update.unitNumber = unitNumber
-        db.session.commit()
-        return True
-    except Exception as e:
-        print(e)
-        return False
-
-########################### ORDER DB ###########################
-
-def create_order(id, storeId):
-    orderId = uuid4()
-    new_order = OrderDb(orderId=str(orderId),
-                        customerId=id,
-                        storeId=storeId,
-                        orderDetails="Something Cool",
-                        status=ORDER_SENT)
-    try:
-        db.session.add(new_order)
-        db.session.commit()
-        return True
-    except Exception as e:
-        print(e)
-        return False
 
 def get_customer_orders(customerId):
     orders = OrderDb.query.filter_by(customerId=customerId).all()
@@ -127,9 +96,50 @@ def get_store_orders(storeId):
                                             AT_DEST_HUB or
                                             ARRIVED).all()
     return customerNames, incoming, preparing, delivery
-    
 
+def get_vendor_details(id):
+    #this should return the entire row
+    user =  UserDb.query.filter_by(accountType=STORE,
+                                id=id).all()
+    userDetails = {}
+    for details in user:
+        id = details.id
+        if id not in userDetails:
+            newName = UserDb.query.filter_by(id=id).first().name
+            userDetails[id] = newName
+    return userDetails
     
+def create_order(id, storeId):
+    orderId = uuid4()
+    new_order = OrderDb(orderId=str(orderId),
+                        customerId=id,
+                        storeId=storeId,
+                        orderDetails="Something Cool",
+                        status=ORDER_SENT)
+    try:
+        db.session.add(new_order)
+        db.session.commit()
+        return False
+    except Exception as e:
+        print(e)
+        return e
+    
+def get_order(orderId):
+    return OrderDb.query.get_or_404(orderId)
+
+# change order status first then when the other party acknowlege then delete?
+def delete_order(id, orderId):
+    order_to_delete = OrderDb.query.get_or_404(orderId)
+    if order_to_delete.storeId == id:
+        try:
+            db.session.delete(order_to_delete)
+            db.session.commit()
+            return "success"
+        except:
+            return "There was an error deleting the order"
+    else:
+        return "Order does not belong to user"
+
 def set_order_status(userId, orderId, status):
     order_to_update = OrderDb.query.get_or_404(orderId)
 
@@ -137,27 +147,25 @@ def set_order_status(userId, orderId, status):
         try:
             order_to_update.status = status
             db.session.commit()
-            return True
+            return False
         except Exception as e:
             print(e)
-            return False
-    return False
+            return e
+    return "Order does not belong to user!"
+
+def update_user(id, name, email, postalCode, unitNumber):
+    user_to_update = UserDb.query.get_or_404(id)
+    emailCheck = UserDb.query.filter_by(email=email).first()
+    if emailCheck and user_to_update!=emailCheck:
+        return "Email already exist"
     
-# def get_order(orderId):
-#     return OrderDb.query.get_or_404(orderId)
-
-# change order status first then when the other party acknowlege then delete?
-# def delete_order(id, orderId):
-#     order_to_delete = OrderDb.query.get_or_404(orderId)
-#     if order_to_delete.storeId == id:
-#         try:
-#             db.session.delete(order_to_delete)
-#             db.session.commit()
-#             return "success"
-#         except:
-#             return "There was an error deleting the order"
-#     else:
-#         return "Order does not belong to user"
-
-
-
+    try:
+        user_to_update.name = name
+        user_to_update.email = email
+        user_to_update.postalCode = postalCode
+        user_to_update.unitNumber = unitNumber
+        db.session.commit()
+        return False
+    except Exception as e:
+        print(e)
+        return e

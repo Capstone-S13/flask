@@ -52,7 +52,7 @@
                     <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
                     <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
                     <form action="/store/order/{{order.orderId}}" method="POST" class="row align-items-start">
-                      <button name="order_button" value="Cancelled" class="m-1 btn col btn-outline-red">Reject Order</button>
+                      <button name="order_button" value="8" class="m-1 btn col btn-outline-red">Reject Order</button>
                       <button name="order_button" value="Order Received" class="m-1 btn col btn-outline-green">Accept Order</button>
                     </form>
                   </div>

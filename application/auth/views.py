@@ -1,6 +1,6 @@
-from flask import Flask, render_template, url_for, request, redirect, flash, Blueprint
+from . import AUTH_BLUEPRINT
+from flask import render_template, url_for, request, redirect, flash
 from flask_login import login_user, login_required, logout_user
-from datetime import datetime
 import application.system as system
 
 # Account Type
@@ -19,15 +19,13 @@ DELIVERED = "Delivered"
 CANCELLED = "Cancelled"
 FAILED = "Failed"
 
-LOGIN_BLUEPRINT = Blueprint('login_blueprint', __name__)
-
 # Login Page
-@LOGIN_BLUEPRINT.route('/')
+@AUTH_BLUEPRINT.route('/')
 def login():
     
-    return render_template('login.html')
+    return render_template('auth/login.html')
 
-@LOGIN_BLUEPRINT.route('/', methods=['POST'])
+@AUTH_BLUEPRINT.route('/', methods=['POST'])
 def login_post():
     error = None
     if request.method == 'POST':
@@ -43,24 +41,26 @@ def login_post():
             return redirect('/')
         
 # Sign Up Page
-@LOGIN_BLUEPRINT.route('/signup')
+@AUTH_BLUEPRINT.route('/signup')
 def signup():
-    return render_template('signup.html')
+    return render_template('auth/signup.html')
 
-@LOGIN_BLUEPRINT.route('/signup', methods=['POST'])
+@AUTH_BLUEPRINT.route('/signup', methods=['POST'])
 def signup_post():
     if request.method == 'POST':
-        create_status = system.create_acc(request.form['name'], 
-                                          request.form['email'], 
-                                          request.form['password'],
-                                          request.form['postalCode'],
-                                          request.form['unit'], 
-                                          request.form['accType'])
-        if create_status:
-            return redirect('/')
-        return render_template('signup.html')
-        
-@LOGIN_BLUEPRINT.route('/logout')
+        error = system.create_acc(request.form['name'], 
+                                request.form['email'], 
+                                request.form['password'],
+                                request.form['postalCode'],
+                                request.form['unit'], 
+                                request.form['accType'])
+        if error:
+            print(error)
+            return redirect('/signup')
+        return redirect('/')
+
+# Logout
+@AUTH_BLUEPRINT.route('/logout')
 @login_required
 def logout():
     logout_user()

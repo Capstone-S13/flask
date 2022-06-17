@@ -81,18 +81,18 @@ def init_database(test_client):
     
     db.drop_all()
     
-@pytest.fixture()
-def test_with_customer_user(test_client):
-    @login_manager.request_loader
-    def load_user_from_request():
-        return UserDb.query("customerIdnuMber69123").first()
+# @pytest.fixture()
+# def test_with_customer_user(test_client):
+#     @login_manager.request_loader
+#     def load_user_from_request():
+#         return UserDb.query("customerIdnuMber69123").first()
     
-@pytest.fixture
-def user():
-    return UserDb(id="customerIdnuMber69123",
-                  email='jdoe@gmail.com',
-                  name='John Doe',
-                  password=generate_password_hash('weakpassword'),
-                  postalCode='S917341',
-                  unitNumber='#24-324',
-                  accountType=0)
+# @pytest.fixture
+# def user():
+#     return UserDb(id="customerIdnuMber69123",
+#                   email='jdoe@gmail.com',
+#                   name='John Doe',
+#                   password=generate_password_hash('weakpassword'),
+#                   postalCode='S917341',
+#                   unitNumber='#24-324',
+#                   accountType=0)

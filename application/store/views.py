@@ -20,10 +20,13 @@ DELIVERED = "Delivered"
 CANCELLED = "Cancelled"
 FAILED = "Failed"
 
-# Store Landing Page
+############################
+#### Store Landing Page ####
+############################
+
 @STORE_BLUEPRINT.route('/landing')
 @login_required
-def storeLandingPage():
+def landing():
     customerNames, incoming, preparing, delivery = system.get_store_orders(current_user.id)
     print(customerNames)
     print(incoming)
@@ -48,9 +51,9 @@ def order(orderId):
         if error:
             print("There was an error updating order status")
             print(error)
-            return redirect("/store/landing")
+            return redirect(url_for('store.landing'))
         print("ORDER UPDATED!!")
-        return redirect("/store/landing")
+        return redirect(url_for('store.landing'))
 
 # Store Viewing Single Order Page
 # @STORE_BLUEPRINT.route(/<string:current_user.id>/order/<string:orderId>', methods=['POST', 'GET'])
@@ -59,10 +62,13 @@ def order(orderId):
 #     order = system.get_order(current_user.id, orderId)
 #     return render_template("order.html", order=order, current_user.id=current_user.id)
 
-# Vendor Settings Page
+#############################
+#### Store Settings Page ####
+#############################
+
 @STORE_BLUEPRINT.route('/settings', methods=['GET', 'POST'])
 @login_required
-def storeSettings():
+def settings():
     if request.method == 'POST':
         error = system.update_user(current_user.id,
                                     request.form["name"],
@@ -73,5 +79,5 @@ def storeSettings():
             print("error updating user details")
             return render_template("store/storeSettings.html", user=current_user)
         print("Details Updated")
-        return redirect("/store/landing")
+        return redirect(url_for('store.landing'))
     return render_template("store/storeSettings.html", user=current_user)

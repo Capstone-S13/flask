@@ -1,4 +1,5 @@
 from sqlalchemy import true
+import requests
 from werkzeug.security import generate_password_hash, check_password_hash
 from application.models import db, UserDb, OrderDb, IngressDb
 from uuid import uuid4
@@ -27,6 +28,19 @@ ARRIVED = "Arrived"
 DELIVERED = "Delivered"
 CANCELLED = "Cancelled"
 FAILED = "Failed"
+
+statuses = {"Order Sent":0,
+            "Order Received":1,
+            "Robot Dispatched":2,
+            "At Store Hub":3,
+            "Between Hubs":4,
+            "At Destination Hub":5,
+            "Arrived":6,
+            "Delivered":7,
+            "Cancelled":8,
+            "Failed":9}
+# statuses[status]
+# list(statuses)[2]
 
 def check_login(email, password):
     userAcc = UserDb.query.filter_by(email=email).first()
@@ -119,6 +133,7 @@ def create_order(id, storeId):
     try:
         db.session.add(new_order)
         db.session.commit()
+        
         return False
     except Exception as e:
         print(e)
@@ -147,6 +162,11 @@ def set_order_status(userId, orderId, status):
         try:
             order_to_update.status = status
             db.session.commit()
+            if status == ROBOT_DISPATCHED:
+                store = UserDb.query.get_or_404(userId)
+                # address = IngressDb.query.get_or_404(store.postalCode)
+                waypoint = Address("vovi_city", "pantry")
+                send_order_rmf(waypoint)
             return False
         except Exception as e:
             print(e)
@@ -169,3 +189,37 @@ def update_user(id, name, email, postalCode, unitNumber):
     except Exception as e:
         print(e)
         return e
+    
+def test_send_waypoint():
+    print("testing")
+    send_order_rmf(ROBOT_DISPATCHED, "vovi_city", "pantry")
+    
+def send_order_rmf(status, buildingName, unit):
+    url = "http://10.12.192.185:7171/order"
+    requests.post(url, json={
+                            "order":
+                                {
+                                    "company_name": "barg",
+                                    "id": str(uuid4()),
+                                    "description": "something lame"
+                                },
+                            "unit":
+                                {
+                                    'building_name':f'{buildingName}',
+                                    'unit':f'{unit}'
+                                },
+                            "operation":
+                                {
+                                    "task": f'{statuses[status]}'
+                                }
+                            })
+    print("test finished")
+
+def get_response():
+    url = "http://10.12.192.185:7171"
+    requests.get(url)
+
+class Address():    
+    def __init__(self, buildingName, unit):
+        self.buildingName = buildingName
+        self.unit = unit

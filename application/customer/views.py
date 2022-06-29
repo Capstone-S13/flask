@@ -19,10 +19,13 @@ DELIVERED = "Delivered"
 CANCELLED = "Cancelled"
 FAILED = "Failed"
 
-# Customer Landing Page
+###############################
+#### Customer Landing Page ####
+###############################
+
 @CUSTOMER_BLUEPRINT.route('/landing', methods=['GET'])
 @login_required
-def customerLandingPage():
+def landing():
     stores = system.get_all_stores()
     storeNames, delivery = system.get_customer_orders(current_user.id)
     print(delivery)
@@ -42,7 +45,7 @@ def create(storeId):
     else:
         print("ORDER CREATED!!")
         # flash("order successfully created", 'info')
-        return redirect("/customer/landing")
+        return redirect(url_for('customer.landing'))
         
 
 # Customer Viewing Single Order
@@ -79,10 +82,13 @@ def create(storeId):
 # @CUSTOMER_BLUEPRINT.route('/order/<string:orderId>/status')
 # @login_required
 
-# Customer Settings Page
+################################
+#### Customer Settings Page ####
+################################
+
 @CUSTOMER_BLUEPRINT.route('/settings', methods=['GET', 'POST'])
 @login_required
-def customerSettings():
+def settings():
     if request.method == 'POST':
         error = system.update_user(current_user.id,
                                     request.form["name"],
@@ -93,5 +99,5 @@ def customerSettings():
             print("error updating user details")
             return render_template("customer/customerSettings.html", user=current_user)
         print("Details Updated")
-        return redirect("/customer/landing")
+        return redirect(url_for('customer.landing'))
     return render_template("customer/customerSettings.html", user=current_user)

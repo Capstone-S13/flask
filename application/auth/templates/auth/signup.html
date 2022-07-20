@@ -62,7 +62,7 @@
         </div>
         
         <input class="btn btn-lg btn-block mb-2" type="submit" value="Sign Up">
-        <a href="/">Have an Account? Login here</a>
+        <a href="{{url_for('auth.login')}}">Have an Account? Login here</a>
       </form>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}

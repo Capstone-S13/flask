@@ -1,6 +1,7 @@
-from . import AUTH_BLUEPRINT
-from flask import render_template, url_for, request, redirect, flash
+from flask import render_template, url_for, request, redirect, flash, current_app
 from flask_login import login_user, login_required, logout_user
+
+from . import AUTH_BLUEPRINT
 import application.system as system
 
 # Account Type
@@ -19,28 +20,32 @@ DELIVERED = "Delivered"
 CANCELLED = "Cancelled"
 FAILED = "Failed"
 
-# Login Page
+####################
+#### Login Page ####
+####################
+
 @AUTH_BLUEPRINT.route('/')
 def login():
-    
     return render_template('auth/login.html')
 
 @AUTH_BLUEPRINT.route('/', methods=['POST'])
 def login_post():
-    error = None
     if request.method == 'POST':
         loginApprove, user = system.check_login(request.form['email'], request.form['password'])
 
         if loginApprove == "approved":
             login_user(user)
             if user.accountType == CUSTOMER:
-                return redirect('/customer/landing')
+                return redirect(url_for('customer.landing'))
             else:
-                return redirect('/store/landing')
+                return redirect(url_for('store.landing'))
         else:
-            return redirect('/')
-        
-# Sign Up Page
+            return redirect(url_for('auth.login'))
+
+######################
+#### Sign Up Page ####
+######################
+
 @AUTH_BLUEPRINT.route('/signup')
 def signup():
     return render_template('auth/signup.html')
@@ -56,12 +61,15 @@ def signup_post():
                                 request.form['accType'])
         if error:
             print(error)
-            return redirect('/signup')
-        return redirect('/')
+            return redirect(url_for('auth.signup'))
+        return redirect(url_for('auth.login'))
 
-# Logout
+################
+#### Logout ####
+################
+
 @AUTH_BLUEPRINT.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect('/')
+    return redirect(url_for('auth.login'))

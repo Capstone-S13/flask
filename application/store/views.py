@@ -2,6 +2,7 @@
 from . import STORE_BLUEPRINT
 from flask import render_template, url_for, request, redirect, flash
 from flask_login import login_required, current_user
+from datetime import datetime
 import application.system as system
 
 # Account Type
@@ -20,24 +21,19 @@ DELIVERED = "Delivered"
 CANCELLED = "Cancelled"
 FAILED = "Failed"
 
-# Store Landing Page
+############################
+#### Store Landing Page ####
+############################
+
 @STORE_BLUEPRINT.route('/landing')
 @login_required
-def storeLandingPage():
+def landing():
     customerNames, incoming, preparing, delivery = system.get_store_orders(current_user.id)
-<<<<<<< HEAD:application/blueprints/store_blueprint.py
     # print(customerNames)
     # print(incoming)
     # print(preparing)
     # print(delivery)
-    return render_template("storeLanding.html",
-=======
-    print(customerNames)
-    print(incoming)
-    print(preparing)
-    print(delivery)
     return render_template("store/storeLanding.html",
->>>>>>> ea89de58c2b2c68d3c0a3a91a2583620af041966:application/store/views.py
                            storeId=current_user.id,
                            customerNames = customerNames,
                            incoming=incoming,
@@ -56,9 +52,9 @@ def order(orderId):
         if error:
             print("There was an error updating order status")
             print(error)
-            return redirect("/store/landing")
+            return redirect(url_for('store.landing'))
         print("ORDER UPDATED!!")
-        return redirect("/store/landing")
+        return redirect(url_for('store.landing'))
 
 # Store Viewing Single Order Page
 # @STORE_BLUEPRINT.route(/<string:current_user.id>/order/<string:orderId>', methods=['POST', 'GET'])
@@ -67,10 +63,13 @@ def order(orderId):
 #     order = system.get_order(current_user.id, orderId)
 #     return render_template("order.html", order=order, current_user.id=current_user.id)
 
-# Vendor Settings Page
+#############################
+#### Store Settings Page ####
+#############################
+
 @STORE_BLUEPRINT.route('/settings', methods=['GET', 'POST'])
 @login_required
-def storeSettings():
+def settings():
     if request.method == 'POST':
         error = system.update_user(current_user.id,
                                     request.form["name"],
@@ -81,5 +80,5 @@ def storeSettings():
             print("error updating user details")
             return render_template("store/storeSettings.html", user=current_user)
         print("Details Updated")
-        return redirect("/store/landing")
+        return redirect(url_for('store.landing'))   
     return render_template("store/storeSettings.html", user=current_user)

@@ -1,7 +1,7 @@
-def test_landing_page(test_client, init_database):
-    response = test_client.get('/customer/landing',
-                               follow_redirects=True)
-    assert response.status_code == 200
+# def test_landing_page(test_client, init_database):
+#     response = test_client.get('/customer/landing',
+#                                follow_redirects=True)
+#     assert response.status_code == 200
     # assert b'Please login' in response.data
     # assert b'Customer Landing' in response.data
     # assert b'Customer' in response.data

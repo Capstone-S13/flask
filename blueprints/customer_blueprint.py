@@ -1,7 +1,12 @@
-from flask import Flask, render_template, url_for, request, redirect, flash, Blueprint
+from . import CUSTOMER_BLUEPRINT
+from flask import render_template, url_for, request, redirect, flash
 from flask_login import login_required, current_user
+<<<<<<<< HEAD:blueprints/customer_blueprint.py
 from datetime import datetime
 import system as system
+========
+import application.system as system
+>>>>>>>> ec20b0dbc267e97964075e15918374dde319feca:application/customer/views.py
 
 # Account Type
 CUSTOMER = 0
@@ -19,16 +24,21 @@ DELIVERED = "Delivered"
 CANCELLED = "Cancelled"
 FAILED = "Failed"
 
-CUSTOMER_BLUEPRINT = Blueprint('customer_blueprint', __name__)
+###############################
+#### Customer Landing Page ####
+###############################
 
-# Customer Landing Page
 @CUSTOMER_BLUEPRINT.route('/landing', methods=['GET'])
 @login_required
-def customerLandingPage():
+def landing():
     stores = system.get_all_stores()
     storeNames, delivery = system.get_customer_orders(current_user.id)
     print(delivery)
+<<<<<<<< HEAD:blueprints/customer_blueprint.py
     return render_template("customerLanding.html",
+========
+    return render_template("customer/customerLanding.html",
+>>>>>>>> ec20b0dbc267e97964075e15918374dde319feca:application/customer/views.py
                            customerId=current_user.id,
                            stores = stores,
                            storeNames=storeNames,
@@ -44,7 +54,11 @@ def create(storeId):
     else:
         print("ORDER CREATED!!")
         # flash("order successfully created", 'info')
+<<<<<<<< HEAD:blueprints/customer_blueprint.py
         return redirect("/customer/landing")
+========
+        return redirect(url_for('customer.landing'))
+>>>>>>>> ec20b0dbc267e97964075e15918374dde319feca:application/customer/views.py
         
 
 # Customer Viewing Single Order
@@ -81,19 +95,22 @@ def create(storeId):
 # @CUSTOMER_BLUEPRINT.route('/order/<string:orderId>/status')
 # @login_required
 
-# Customer Settings Page
+################################
+#### Customer Settings Page ####
+################################
+
 @CUSTOMER_BLUEPRINT.route('/settings', methods=['GET', 'POST'])
 @login_required
-def customerSettings():
+def settings():
     if request.method == 'POST':
-        userUpdateStatus = system.update_user(current_user.id,
-                                                request.form["name"],
-                                                request.form["email"],
-                                                request.form["postalCode"],
-                                                request.form["unit"])
-        if userUpdateStatus:
-            print("Details Updated")
-            return redirect("/customer/landing")
-        print("error updating user details")
-        return render_template("customerSettings.html", user=current_user)
-    return render_template("customerSettings.html", user=current_user)
+        error = system.update_user(current_user.id,
+                                    request.form["name"],
+                                    request.form["email"],
+                                    request.form["postalCode"],
+                                    request.form["unit"])
+        if error:
+            print("error updating user details")
+            return render_template("customer/customerSettings.html", user=current_user)
+        print("Details Updated")
+        return redirect(url_for('customer.landing'))
+    return render_template("customer/customerSettings.html", user=current_user)

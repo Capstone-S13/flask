@@ -1,15 +1,29 @@
+import os
 from flask import Flask
 from flask_login import LoginManager
 
 from application.models import db, dbBind
 
 login_manager = LoginManager()
-login_manager.login_view = "/"
+login_manager.login_view = 'auth.login'
 
 def create_app(config_filename=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_pyfile(config_filename)
     
+    app = Flask(__name__, instance_relative_config=True)
+    
+    app.config.from_object(config[config_name])
+    
+    initialise_extensions(app)
+    register_blueprints(app)
+    return app
+
+##########################
+#### Helper Functions ####
+##########################
+
+def initialise_extensions(app):
     db.init_app(app)
     login_manager.init_app(app)
 
@@ -29,10 +43,8 @@ def create_app(config_filename=None):
     app.register_blueprint(STORE_BLUEPRINT, url_prefix='/store')
     
     return app
-<<<<<<< HEAD
 
 # if __name__== "__main__":
 #     app = create_app('flask.cfg')
 #     app.run(debug=True)
-=======
->>>>>>> ea89de58c2b2c68d3c0a3a91a2583620af041966
+

@@ -19,7 +19,7 @@
     <div class="container-nav">
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-yellow">
             <div class="fixed-width">
-                <a class="nav-icon orange col" href="/store/landing">Shop Owner</a>
+                <a class="nav-icon orange col" href="{{url_for('store.landing')}}">Shop Owner</a>
                 <span class="orange col">View all orders and their status</span>
             </div>
           
@@ -29,8 +29,8 @@
             </a>
           
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="/store/settings">Settings</a>
-              <a class="dropdown-item" href="/logout">Logout</a>
+              <a class="dropdown-item" href="{{url_for('store.settings')}}">Settings</a>
+              <a class="dropdown-item" href="{{url_for('auth.logout')}}">Logout</a>
             </div>
           </div>
           
@@ -52,7 +52,7 @@
                     <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
                     <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
                     <form action="/store/order/{{order.orderId}}" method="POST" class="row align-items-start">
-                      <button name="order_button" value="Cancelled" class="m-1 btn col btn-outline-red">Reject Order</button>
+                      <button name="order_button" value="8" class="m-1 btn col btn-outline-red">Reject Order</button>
                       <button name="order_button" value="Order Received" class="m-1 btn col btn-outline-green">Accept Order</button>
                     </form>
                   </div>

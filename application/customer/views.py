@@ -30,13 +30,15 @@ FAILED = "Failed"
 @login_required
 def landing():
     stores = system.get_all_stores()
-    storeNames, delivery = system.get_customer_orders(current_user.id)
+    storeNames, delivery, waypoints = system.get_customer_orders(current_user.id)
+
     print(delivery)
     return render_template("customer/customerLanding.html",
                            customerId=current_user.id,
                            stores = stores,
                            storeNames=storeNames,
-                           delivery=delivery)
+                           delivery=delivery,
+                           waypoints = waypoints)
 
 # Customer Creating Order
 @CUSTOMER_BLUEPRINT.route('/create/<string:storeId>')
@@ -50,6 +52,32 @@ def create(storeId):
         # flash("order successfully created", 'info')
         return redirect(url_for('customer.landing'))
         
+
+@CUSTOMER_BLUEPRINT.route('/order/<string:orderId>', methods=['GET', 'POST'])
+@login_required
+def order(orderId):
+    if request.method == "POST":
+        new_status = request.form["order_button"]
+        print(new_status)
+        error = system.set_order_status(current_user.id,
+                                        orderId,
+                                        new_status)
+        if error:
+            print("There was an error updating order status")
+            print(error)
+            return redirect(url_for('customer.landing'))
+        print("ORDER UPDATED!!")
+        return redirect(url_for('customer.landing'))
+
+@CUSTOMER_BLUEPRINT.route('/order/waypoint/<string:orderId>', methods=['POST'])
+@login_required
+def set_waypoint(orderId):
+    if request.method == "POST":
+        new_waypoint = request.form["waypoint_button"]
+        print(new_waypoint)
+        system.set_new_waypoint(orderId, new_waypoint)
+        return redirect(url_for('customer.landing'))
+    return redirect(url_for('customer.landing'))
 
 # Customer Viewing Single Order
 # @CUSTOMER_BLUEPRINT.route('/order/<string:orderId>', methods=['POST', 'GET'])

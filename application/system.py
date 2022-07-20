@@ -1,3 +1,4 @@
+import ipaddress
 from tkinter import E
 from sqlalchemy import true
 import requests
@@ -175,12 +176,16 @@ def get_order(orderId):
 def get_customer_orders(customerId):
     orders = OrderDb.query.filter_by(customerId=customerId).all()
     storeNames = {}
+    order_waypoints = {}
     for order in orders:
         id = order.storeId
         if id not in storeNames:
             newName = UserDb.query.filter_by(id=id).first().name
             storeNames[id] = newName
-    return storeNames, orders
+        if order.status == DELIVERING_TO_DOORSTEP:
+            waypoints = get_all_waypoints(order.customerPostalCode)
+            order_waypoints[order.orderId] = waypoints
+    return storeNames, orders, order_waypoints
 
 def get_store_orders(storeId):
     orders = OrderDb.query.filter_by(storeId=storeId).all()
@@ -241,7 +246,11 @@ def set_order_status(userId, orderId, status):
                 send_internal_task_rmf(ipAddr, port, curr_task.taskId, 'nil', 'nil', curr_task.robotId, TASK_DELIVER_TO_HUB, orderId)
 
             # Customer request for parcel to be delivered from destination hub
-            # elif status == DELIVERING_TO_DOORSTEP:
+            elif status == DELIVERED:
+                curr_task = TaskDb.query.filter_by(orderId=orderId).first()
+                update_task_status(curr_task.taskId, STATUS_TASK_RECEIVED)
+                ipAddr, port = get_ip_route(order_to_update.customerPostalCode)
+                send_external_task_rmf(ipAddr, port, curr_task.taskId, 'lounge', 'nil', curr_task.robotId, TASK_GO_TO_UNIT, 'nil')
             #     buildingName = get_ingress_point(order_to_update.storePostalCode)
             #     waypoint = IngressDb.query.filter_by(postalCode=order_to_update.storePostalCode,
             #                                         unitNumber=order_to_update.storeUnitNumber).first()
@@ -369,6 +378,14 @@ def update_task_robot(taskId, robotId):
     except Exception as e:
         print(e)
         return e
+
+def set_new_waypoint(orderId, new_waypoint):
+    task_to_update = TaskDb.query.filter_by(orderId=orderId).first()
+    order = get_order(orderId)
+    ipAddr, port = get_ip_route(order.customerPostalCode)
+    buildingName = get_ingress_point(order.customerPostalCode)
+    waypoint = get_waypoint(order.customerPostalCode, order.customerUnitNumber)
+    send_external_task_rmf(ipAddr, port, task_to_update.taskId, buildingName, waypoint, task_to_update.robotId, TASK_GO_TO_UNIT, order.orderId)
 
 #############
 #### RMF ####

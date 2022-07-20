@@ -26,7 +26,7 @@ EGRESS_POINT = "Egress Point"
 
 # RMF Ports
 INTERNAL_PORT = "7171" 
-EXTERNAL_PORT = "7373"
+EXTERNAL_PORT = "7878"
 
 # Order Statuses
 ORDER_SENT = "Order Sent"

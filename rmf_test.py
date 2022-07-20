@@ -8,9 +8,10 @@ app = Flask(__name__)
 def internal_task():
     json_req = request.get_json()
     print(json_req)
+
     sleep(5)
-    print("sending")
     url = "http://172.23.31.173:5000/task-status"
+    print("internal task completed")
     requests.post(url, json={
                             "robot":
                                 {
@@ -25,8 +26,10 @@ def internal_task():
 def external_task():
     json_req = request.get_json()
     print(json_req)
+
     sleep(5)
     url = "http://172.23.31.173:5000/task-status"
+    print("external task completed")
     requests.post(url, json={
                             "robot":
                                 {
@@ -41,8 +44,10 @@ def external_task():
 def eject_robot():
     json_req = request.get_json()
     # print(json_req)
+
     sleep(5)
     url = "http://172.23.31.173:5000/task-status"
+    print("robot ejecting")
     requests.post(url, json={
                             "robot":
                                 {
@@ -53,6 +58,7 @@ def eject_robot():
                             })
 
     sleep(5)
+    print("robot ejected")
     requests.post(url, json={
                             "robot":
                                 {

@@ -1,0 +1,7 @@
+image: level_4_map_2.pgm
+resolution: 0.050000
+origin: [-5.563073, -36.382617, 0.000000]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+

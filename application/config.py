@@ -16,7 +16,8 @@ class BaseConfig:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///database/user.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_BINDS = {'order': 'sqlite:///database/order.db',
-                        'ingress': 'sqlite:///database/ingress.db'}
+                        'ingress': 'sqlite:///database/ingress.db',
+                        'task': 'sqlite:///database/task.db'}
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration"""

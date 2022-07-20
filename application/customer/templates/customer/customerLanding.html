@@ -63,9 +63,29 @@
                   <div class="card-body">
                       <h5 class="card-title text-color">Order From: {{storeNames[order.storeId]}}</h5>
                       <p class="card-text text-color">Date and time: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
-                      <p class="card-text text-color">Status: {{order.status}}</p>
-                      <button name="order_button" value="7" class="m-1 btn col btn-outline-green">Order Received</button>
+                      {% if order.status == "At Destination Hub" %}
+                        <form action="form-waypoint" method="post">
+                          <select class="form-select" aria-label="Default select example">
+                            <option selected>Select a Waypoint</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                          </select>
+                          <button name="waypoint_button" type="submit" class="m-1 btn col btn-outline-red">Confirm Waypoint</button>
+                        </form>
+
+                        {% elif order.status == "Waiting for Parcel" %}
+                        <h5 class="card-title text-color">Order From: {{storeNames[order.storeId]}}</h5>
+                        <p class="card-text text-color">Date and time: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
+                        <form action="form-waypoint" method="post">
+                          <button name="parcel_button" type="submit" class="m-1 btn col btn-outline-red">Parcel Deposited</button>
+                        </form>
+                        
+                      {% else %}
+                        <p class="card-text text-color">Status: {{order.status}}</p>
+                        <button name="order_button" value="7" class="m-1 btn col btn-outline-green">Order Received</button>
                       <!-- <span class="card-text text-color">instructions here</span> -->
+                      {% endif %}
                   </div>
                 </div>
                 </div>

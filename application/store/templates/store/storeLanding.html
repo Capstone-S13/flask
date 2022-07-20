@@ -93,7 +93,18 @@
                   <div class="card-body">
                     <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
                     <p class="card-text text-color">Status: {{order.status}}</p>
-                    <span class="card-text text-color">instructions here</span>
+                    {% if order.status == "Waiting for Parcel" %}
+                        <h5 class="card-title text-color">Order From: {{customerNames[order.customerId]}}</h5>
+                        <p class="card-text text-color">Date and time: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
+                        <form action="/store/order/{{order.orderId}}" method="post">
+                          <button name="parcel_button" value="Storing in Store Hub" class="m-1 btn col btn-outline-red">Parcel Deposited</button>
+                        </form>
+                        
+                      {% else %}
+                        <p class="card-text text-color">Status: {{order.status}}</p>
+                        <button name="order_button" value="7" class="m-1 btn col btn-outline-green">Order Received</button>
+                      <!-- <span class="card-text text-color">instructions here</span> -->
+                      {% endif %}
                   </div>
                   </div>
               </div>

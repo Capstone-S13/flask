@@ -13,9 +13,12 @@ STORE = 1
 ORDER_SENT = "Order Sent"
 ORDER_RECEIVED = "Order Received"
 ROBOT_DISPATCHED = "Robot Dispatched"
+WAITING_FOR_PARCEL = "Waiting for Parcel"
+STORING_IN_STORE_HUB = "Storing in Store Hub"
 AT_STORE_HUB = "At Store Hub"
 BETWEEN_HUBS = "Between Hubs"
 AT_DEST_HUB = "At Destination Hub"
+DELIVERING_TO_DOORSTEP = "Delivering to Doorstep"
 ARRIVED = "Arrived"
 DELIVERED = "Delivered"
 CANCELLED = "Cancelled"
@@ -45,10 +48,14 @@ def landing():
 @login_required
 def order(orderId):
     if request.method == "POST":
-        print(request.form["order_button"])
+        if "order_button" in request.form:
+            new_status = request.form["order_button"]
+        else:
+            new_status = request.form["parcel_button"]
+        print(new_status)
         error = system.set_order_status(current_user.id,
                                         orderId,
-                                        request.form['order_button'])
+                                        new_status)
         if error:
             print("There was an error updating order status")
             print(error)

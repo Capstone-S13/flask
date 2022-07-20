@@ -30,66 +30,57 @@
           
         </nav>
         <nav class="tabpanel nav nav-fill bg-yellow justify-content-around">
-            <a class="nav-link orange active" aria-current="page" href="#shops" role="tab" data-toggle="tab">Shops</a>
-            <a class="nav-link orange" href="#delivery" role="tab" data-toggle="tab">Delivery</a>
+          <a class="nav-link orange" href="javascript:void(0)" onclick="openTab(event, 'Shops');">Shops</a>
+          <a class="nav-link orange" href="javascript:void(0)" onclick="openTab(event, 'Delivery');">Delivery</a>
         </nav>
 
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane fade in active" id="shops">
-            <div class="container p-3">
-                
-                <div class="row">
-                  {% for store in stores %}
-                    <div class="col-sm-6 mb-3">
-                      <div class="card">
-                        <img src="https://static.wikia.nocookie.net/logopedia/images/c/c0/GrabFood_%282016%29.svg/revision/latest?cb=20210219083903" class="card-img-top" alt="...">
-                        <div class="card-body">
-                          <h5 class="card-title text-color text-center">{{store.name}}</h5>
-                          <a href="/customer/create/{{store.id}}" class="btn btn-yellow btn-block">Buy here</a>
-                        </div>
-                      </div>
-                    </div>
-                  {% endfor %}
-                </div>
-              </div>
-          </div>
-          
-          <div role="tabpanel" class="tab-pane fade" id="delivery">
-            <div class="container p-3">
-              <div class="row">
-                {% for order in delivery %}
-                <div class="col-sm-6 mb-3">
-                  <div class="card">
+        <div id="Shops" class="container p-3" style="display:block">
+          <div class="row">
+            {% for store in stores %}
+              <div class="col-sm-6 mb-3">
+                <div class="card">
+                  <img src="https://static.wikia.nocookie.net/logopedia/images/c/c0/GrabFood_%282016%29.svg/revision/latest?cb=20210219083903" class="card-img-top" alt="...">
                   <div class="card-body">
-                      <h5 class="card-title text-color">Order From: {{storeNames[order.storeId]}}</h5>
-                      <p class="card-text text-color">Date and time: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
-                      <p class="card-text text-color">Status: {{order.status}}</p>
-                      {% if order.status == "Delivering to Doorstep" %}
-                        <form action="/customer/order/waypoint/{{order.orderId}}" method="post">
-                          <select class="form-select" aria-label="Default select example">
-                            <option selected>Select a Waypoint</option>
-                            {% for waypoint in waypoints[order.orderId] %}
-                            <option value="{{ waypoint }}">{{ waypoint }}</option>
-                            {% endfor %}
-                          </select>
-                          <button name="waypoint_button" type="submit" class="m-1 btn col btn-outline-red">Confirm Waypoint</button>
-                        </form>
-                      <form action="/customer/order/{{order.orderId}}" method="post">
-                        <button name="order_button" value="Delivered" class="m-1 btn col btn-outline-green">Order Received</button>
-                      </form>
-                      {% endif %}
-                      <!-- <span class="card-text text-color">instructions here</span> -->
-                      
+                    <h5 class="card-title text-color text-center">{{store.name}}</h5>
+                    <a href="/customer/create/{{store.id}}" class="btn btn-yellow btn-block">Buy here</a>
                   </div>
                 </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      
+        <div id="Delivery" class="container p-3" style="display:none">
+          <div class="row">
+            {% for order in delivery %}
+            <div class="col-sm-6 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title text-color">Order From: {{storeNames[order.storeId]}}</h5>
+                  <p class="card-text text-color">Date and time: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
+                  <p class="card-text text-color">Status: {{order.status}}</p>
+                  {% if order.status == "Delivering to Doorstep" %}
+                    <form action="/customer/order/waypoint/{{order.orderId}}" method="post">
+                      <select class="form-select" aria-label="Default select example">
+                        <option selected>Select a Waypoint</option>
+                        {% for waypoint in waypoints[order.orderId] %}
+                        <option value="{{ waypoint }}">{{ waypoint }}</option>
+                        {% endfor %}
+                      </select>
+                      <button name="waypoint_button" type="submit" class="m-1 btn col btn-outline-red">Confirm Waypoint</button>
+                    </form>
+
+                  <form action="/customer/order/{{order.orderId}}" method="post">
+                    <button name="order_button" value="Delivered" class="m-1 btn col btn-outline-green">Order Received</button>
+                  </form>
+                  {% endif %}
+                  <!-- <span class="card-text text-color">instructions here</span> --> 
                 </div>
-                
-                {% endfor %}
               </div>
             </div>
+            
+            {% endfor %}
           </div>
-
-        
         </div>
       </div>
       {% if error %}
@@ -97,4 +88,21 @@
       {% endif %}
     {% endblock content %}
   </body>
+
+  <script>
+  function openTab(evt, tabName) {
+    var i, x, tablinks;
+    x = document.getElementsByClassName("container p-3");
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("nav-link");
+    for (i = 0; i < x.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace("nav-link orange active", "nav-link orange");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.firstElementChild.className += "nav-link orange active";
+  }
+  </script>
+
 </html>

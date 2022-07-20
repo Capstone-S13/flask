@@ -18,6 +18,10 @@ class BaseConfig:
     SQLALCHEMY_BINDS = {'order': 'sqlite:///database/order.db',
                         'ingress': 'sqlite:///database/ingress.db',
                         'task': 'sqlite:///database/task.db'}
+    SECURITY_PASSWORD_SALT = 'hjdsafjkhalkj'
+    SECURITY_PASSWORD_HASH='bcrypt'
+    SECURITY_RECOVERABLE=True
+    SECURITY_CHANGEABLE=True
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration"""

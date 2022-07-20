@@ -1,5 +1,6 @@
 from flask import render_template, url_for, request, redirect, flash, current_app
 from flask_login import login_user, login_required, logout_user
+# from flask_security import login_user, login_required, logout_user
 
 from . import AUTH_BLUEPRINT
 import application.system as system

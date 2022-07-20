@@ -1,8 +1,8 @@
 import os
 from flask import Flask
 from flask_login import LoginManager
-
-from application.models import db, dbBind
+# from flask_security import Security
+from application.models import UserDb, db, dbBind
 from application.config import config
 
 login_manager = LoginManager()
@@ -16,9 +16,9 @@ def create_app(config_name=None):
     app = Flask(__name__, instance_relative_config=True)
     
     app.config.from_object(config[config_name])
-    
     initialise_extensions(app)
     register_blueprints(app)
+    # register_security(app, UserDb)
     return app
 
 ##########################
@@ -43,3 +43,7 @@ def register_blueprints(app):
     app.register_blueprint(AUTH_BLUEPRINT)
     app.register_blueprint(CUSTOMER_BLUEPRINT, url_prefix='/customer')
     app.register_blueprint(STORE_BLUEPRINT, url_prefix='/store')
+
+# def register_security(app, user_db):
+#     security = Security()
+#     security.init_app(app, user_db)

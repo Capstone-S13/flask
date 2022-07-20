@@ -1,5 +1,6 @@
 # from base import app
 from flask_sqlalchemy import SQLAlchemy
+from flask_security import UserMixin
 from flask_login import UserMixin
 from datetime import datetime
 
@@ -17,6 +18,7 @@ class UserDb(UserMixin, db.Model):
     postalCode = db.Column(db.Integer, nullable=False)
     unitNumber = db.Column(db.String(50), nullable=False)
     accountType = db.Column(db.Integer, nullable=False)
+    # active = db.Column(db.Boolean(), default=Fale)
     
 class OrderDb(db.Model):
     __bind_key__ = 'order'

@@ -2,7 +2,6 @@
 from . import STORE_BLUEPRINT
 from flask import render_template, url_for, request, redirect, flash
 from flask_login import login_required, current_user
-from datetime import datetime
 import application.system as system
 
 # Account Type
@@ -32,7 +31,7 @@ FAILED = "Failed"
 @login_required
 def landing():
     customerNames, incoming, preparing, delivery = system.get_store_orders(current_user.id)
-    # print(customerNames)
+    print(customerNames)
     # print(incoming)
     # print(preparing)
     # print(delivery)
@@ -87,5 +86,5 @@ def settings():
             print("error updating user details")
             return render_template("store/storeSettings.html", user=current_user)
         print("Details Updated")
-        return redirect(url_for('store.landing'))   
+        return redirect(url_for('store.landing'))
     return render_template("store/storeSettings.html", user=current_user)

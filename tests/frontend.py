@@ -3,6 +3,7 @@ import unittest
 import pytest
 import os
 from pathlib import PurePath
+from application import create_app
 
 @pytest.fixture
 def app():

@@ -163,6 +163,7 @@ def create_order(id, storeId):
     try:
         db.session.add(new_order)
         db.session.commit()
+        
         return False
     except Exception as e:
         print(e)

@@ -1,9 +1,7 @@
 from . import CUSTOMER_BLUEPRINT
 from flask import render_template, url_for, request, redirect, flash
 from flask_login import login_required, current_user
-
 import application.system as system
-from datetime import datetime
 
 # Account Type
 CUSTOMER = 0

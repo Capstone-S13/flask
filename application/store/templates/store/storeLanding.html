@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Store Landing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+
+  </head>
+  <body>
+    {% include "base.html" %}
+    {% block content %}
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <p>{{message}}</p>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    <div class="container-nav">
+        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-yellow">
+            <div class="fixed-width">
+                <a class="nav-icon orange col" href="/store/landing">Shop Owner</a>
+                <span class="orange col">View all orders and their status</span>
+            </div>
+          
+          <div class="dropdown show">
+            <a class="btn navbar-toggler-icon orange" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              
+            </a>
+          
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="/store/settings">Settings</a>
+              <a class="dropdown-item" href="/logout">Logout</a>
+            </div>
+          </div>
+          
+          
+        </nav>
+        <nav class="tabpanel nav nav-fill bg-yellow justify-content-between pl-3 pr-3">
+            <a class="nav-link orange active" aria-current="page" href="#incoming" role="tab" data-toggle="tab">Incoming</a>
+            <a class="nav-link orange" href="#preparing" role="tab" data-toggle="tab">Preparing</a>
+            <a class="nav-link orange" href="#delivery" role="tab" data-toggle="tab">Delivery</a>
+        </nav>
+
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane fade in active" id="incoming">
+            <div class="container-fluid">
+              <div class="row p-3">
+                {% for order in incoming %}
+                <div class="card mb-3" style="width: 100%">
+                  <div class="card-body">
+                    <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
+                    <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
+                    <form action="/store/order/{{order.orderId}}" method="POST" class="row align-items-start">
+                      <button name="order_button" value="8" class="m-1 btn col btn-outline-red">Reject Order</button>
+                      <button name="order_button" value="Order Received" class="m-1 btn col btn-outline-green">Accept Order</button>
+                    </form>
+                  </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          
+          </div>
+          
+          <div role="tabpanel" class="tab-pane fade" id="preparing">
+            <div class="container p-3">
+              <div class="row">
+                {% for order in preparing %}
+                <div class="col-sm-6 mb-3">
+                  <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
+                    <p class="card-text text-color">Order Created: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
+                    <p class="card-text text-color">Status: {{order.status}}</p>
+                    <form action="/store/order/{{order.orderId}}" method="POST" class="row align-items-start">
+                      <button name="order_button" value="Robot Dispatched" class="m-1 btn col btn-outline-green">Ready for Robot</button>
+                    </form>
+                  </div>
+                  </div>
+              </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        
+          <div role="tabpanel" class="tab-pane fade" id="delivery">
+            <div class="container p-3">
+              <div class="row">
+                {% for order in delivery %}
+                <div class="col-sm-6 mb-3">
+                  <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
+                    <p class="card-text text-color">Status: {{order.status}}</p>
+                    <span class="card-text text-color">instructions here</span>
+                  </div>
+                  </div>
+              </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    {% endblock content %}
+  </body>
+</html>

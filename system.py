@@ -1,6 +1,6 @@
 from sqlalchemy import true
 from werkzeug.security import generate_password_hash, check_password_hash
-from application.models import db, UserDb, OrderDb, IngressDb
+from models import db, UserDb, OrderDb, IngressDb
 from uuid import uuid4
 
 # Account Type
@@ -57,9 +57,8 @@ def create_acc(newName, newEmail, newPassword, newPostalCode, newUnitNumber, acc
     try:
         db.session.add(new_acc)
         db.session.commit()
-        return False
+        return True
     except Exception as e:
-        print(e)
         return e
     
 def get_all_stores():
@@ -122,7 +121,7 @@ def create_order(id, storeId):
         return False
     except Exception as e:
         print(e)
-        return e
+        return True
     
 def get_order(orderId):
     return OrderDb.query.get_or_404(orderId)
@@ -140,24 +139,21 @@ def delete_order(id, orderId):
     else:
         return "Order does not belong to user"
 
-def set_order_status(userId, orderId, status):
+def set_order_status(storeId, orderId, status):
     order_to_update = OrderDb.query.get_or_404(orderId)
 
-    if order_to_update.storeId == userId or order_to_update.customerId == userId:
+    if order_to_update.storeId == storeId:
         try:
             order_to_update.status = status
             db.session.commit()
-            return False
+            return True
         except Exception as e:
             print(e)
-            return e
-    return "Order does not belong to user!"
+            return False
+    return False
 
 def update_user(id, name, email, postalCode, unitNumber):
     user_to_update = UserDb.query.get_or_404(id)
-    emailCheck = UserDb.query.filter_by(email=email).first()
-    if emailCheck and user_to_update!=emailCheck:
-        return "Email already exist"
     
     try:
         user_to_update.name = name
@@ -165,7 +161,7 @@ def update_user(id, name, email, postalCode, unitNumber):
         user_to_update.postalCode = postalCode
         user_to_update.unitNumber = unitNumber
         db.session.commit()
-        return False
+        return True
     except Exception as e:
         print(e)
-        return e
+        return False

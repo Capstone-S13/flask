@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+{% extends "base.html" %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <body class="text-center">
+      <form action="" method="post" class="form-signin">
+        <h2>Please login</h2>
+        <div class="form-group text-left">
+          <label for="inputEmail">Email address</label>
+          <input type="email" id="inputEmail" class="form-control" placeholder="Email Address" name="email" 
+          value="{{request.form.email }}" required autofocus>
+        </div>
+        
+        <div class="form-group mb-3 text-left">
+          <label for="inputPassword">Password</label>
+          <input type="password" id="inputPassword" placeholder="Password" class="form-control" name="password" value="{{
+            request.form.password }}">
+         
+        </div>
+        <input class="btn btn-lg btn-block mb-2" type="submit" value="Login">
+        <a href="signup" class="text-center">No Account? Sign Up here</a>
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+  </body>
+  {% endblock %}
+</html>

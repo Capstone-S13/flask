@@ -63,6 +63,7 @@
                   <div class="card-body">
                       <h5 class="card-title text-color">Order From: {{storeNames[order.storeId]}}</h5>
                       <p class="card-text text-color">Date and time: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
+                      <p class="card-text text-color">Status: {{order.status}}</p>
                       {% if order.status == "Delivering to Doorstep" %}
                         <form action="/customer/order/waypoint/{{order.orderId}}" method="post">
                           <select class="form-select" aria-label="Default select example">
@@ -73,11 +74,10 @@
                           </select>
                           <button name="waypoint_button" type="submit" class="m-1 btn col btn-outline-red">Confirm Waypoint</button>
                         </form>
-                      {% endif %}
-                      <p class="card-text text-color">Status: {{order.status}}</p>
                       <form action="/customer/order/{{order.orderId}}" method="post">
                         <button name="order_button" value="Delivered" class="m-1 btn col btn-outline-green">Order Received</button>
                       </form>
+                      {% endif %}
                       <!-- <span class="card-text text-color">instructions here</span> -->
                       
                   </div>

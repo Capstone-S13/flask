@@ -156,7 +156,7 @@ def task_status():
             ipAddr, port = system.get_ip_route(order.customerPostalCode)
             buildingName = system.get_ingress_point(order.customerPostalCode)
             
-            system.eject_robot(ipAddr, port, taskId, robotId, buildingName, system.EGRESS_POINT, order.storePostalCode)
+            system.eject_robot(ipAddr, port, taskId, "external1", buildingName, system.EGRESS_POINT, order.storePostalCode)
             print("requesting external robot")
 
     # external robot dispatched and sent to egress

@@ -99,10 +99,6 @@
                         <form action="/store/order/{{order.orderId}}" method="post">
                           <button name="parcel_button" value="Storing in Store Hub" class="m-1 btn col btn-outline-red">Parcel Deposited</button>
                         </form>
-                        
-                      {% else %}
-                        <p class="card-text text-color">Status: {{order.status}}</p>
-                        <button name="order_button" value="7" class="m-1 btn col btn-outline-green">Order Received</button>
                       <!-- <span class="card-text text-color">instructions here</span> -->
                       {% endif %}
                   </div>

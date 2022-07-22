@@ -384,8 +384,8 @@ def set_new_waypoint(orderId, new_waypoint):
     order = get_order(orderId)
     ipAddr, port = get_ip_route(order.customerPostalCode)
     buildingName = get_ingress_point(order.customerPostalCode)
-    waypoint = get_waypoint(order.customerPostalCode, order.customerUnitNumber)
-    send_external_task_rmf(ipAddr, port, task_to_update.taskId, buildingName, waypoint, task_to_update.robotId, TASK_GO_TO_UNIT, order.orderId)
+    # waypoint = get_waypoint(order.customerPostalCode, order.customerUnitNumber)
+    send_external_task_rmf(ipAddr, port, task_to_update.taskId, buildingName, new_waypoint, task_to_update.robotId, TASK_GO_TO_UNIT, order.orderId)
 
 #############
 #### RMF ####

@@ -74,7 +74,8 @@ def order(orderId):
 @login_required
 def set_waypoint(orderId):
     if request.method == "POST":
-        new_waypoint = request.form["waypoint_button"]
+        print(request.form)
+        new_waypoint = request.form["waypoint_selected"]
         print(new_waypoint)
         system.set_new_waypoint(orderId, new_waypoint)
         return redirect(url_for('customer.landing'))

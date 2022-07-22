@@ -61,18 +61,18 @@
                   <p class="card-text text-color">Status: {{order.status}}</p>
                   {% if order.status == "Delivering to Doorstep" %}
                     <form action="/customer/order/waypoint/{{order.orderId}}" method="post">
-                      <select class="form-select" aria-label="Default select example">
-                        <option selected>Select a Waypoint</option>
-                        {% for waypoint in waypoints[order.orderId] %}
-                        <option value="{{ waypoint }}">{{ waypoint }}</option>
-                        {% endfor %}
-                      </select>
-                      <button name="waypoint_button" type="submit" class="m-1 btn col btn-outline-red">Confirm Waypoint</button>
+                      <label class="form-select for="waypoints">
+                        <select id="waypoints" name="waypoint_selected">
+                          {% for waypoint in waypoints[order.orderId] %}
+                          <option value="{{ waypoint }}">{{ waypoint }}</option>
+                          {% endfor %}
+                        </select>
+                        <button type="submit" class="m-1 btn col btn-outline-red">Confirm Waypoint</button>
+                      </label>
                     </form>
-
-                  <form action="/customer/order/{{order.orderId}}" method="post">
-                    <button name="order_button" value="Delivered" class="m-1 btn col btn-outline-green">Order Received</button>
-                  </form>
+                    <form action="/customer/order/{{order.orderId}}" method="post">
+                      <button name="order_button" value="Delivered" class="m-1 btn col btn-outline-green">Order Received</button>
+                    </form>
                   {% endif %}
                   <!-- <span class="card-text text-color">instructions here</span> --> 
                 </div>

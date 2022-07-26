@@ -52,9 +52,9 @@ def create(storeId):
         print("ORDER CREATED!!")
         # flash("order successfully created", 'info')
         return redirect(url_for('customer.landing'))
-        
 
-@CUSTOMER_BLUEPRINT.route('/order/<string:orderId>', methods=['GET', 'POST'])
+# Changing Order Status
+@CUSTOMER_BLUEPRINT.route('/order/<string:orderId>', methods=['POST'])
 @login_required
 def order(orderId):
     if request.method == "POST":
@@ -70,6 +70,7 @@ def order(orderId):
         print("ORDER UPDATED!!")
         return redirect(url_for('customer.landing'))
 
+# Setting Waypoint for Collection
 @CUSTOMER_BLUEPRINT.route('/order/waypoint/<string:orderId>', methods=['POST'])
 @login_required
 def set_waypoint(orderId):

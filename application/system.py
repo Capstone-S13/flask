@@ -382,10 +382,20 @@ def update_task_robot(taskId, robotId):
 def set_new_waypoint(orderId, new_waypoint):
     task_to_update = TaskDb.query.filter_by(orderId=orderId).first()
     order = get_order(orderId)
-    ipAddr, port = get_ip_route(order.customerPostalCode)
-    buildingName = get_ingress_point(order.customerPostalCode)
-    # waypoint = get_waypoint(order.customerPostalCode, order.customerUnitNumber)
-    send_external_task_rmf(ipAddr, port, task_to_update.taskId, buildingName, new_waypoint, task_to_update.robotId, TASK_GO_TO_UNIT, order.orderId)
+    if order.status == DELIVERING_TO_DOORSTEP:
+        try:
+            unitNumber = IngressDb.query.filter_by(postalCode=order.customerPostalCode,
+                                                    waypoint=new_waypoint).first().unitNumber
+            order.customerUnitNumber = unitNumber
+            db.session.commit()
+            ipAddr, port = get_ip_route(order.customerPostalCode)
+            buildingName = get_ingress_point(order.customerPostalCode)
+            # waypoint = get_waypoint(order.customerPostalCode, order.customerUnitNumber)
+            send_external_task_rmf(ipAddr, port, task_to_update.taskId, buildingName, new_waypoint, task_to_update.robotId, TASK_GO_TO_UNIT, order.orderId)
+        except Exception as e:
+            print(e)
+            return e
+        
 
 #############
 #### RMF ####

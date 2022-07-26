@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
 
+
   </head>
   <body>
     {% include "base.html" %}
@@ -87,6 +88,21 @@
         <p class="error"><strong>Error:</strong> {{ error }}
       {% endif %}
     {% endblock content %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      
+      {% for message in messages %}
+  
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+     
+        {{ message }}
+      </div>
+      {% endfor %}
+  
+    {% endif %}
+  {% endwith %}
+  {% block body %}{% endblock %}
   </body>
 
   <script>

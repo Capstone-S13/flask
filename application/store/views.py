@@ -60,7 +60,7 @@ def order(orderId):
             print("There was an error updating order status")
             print(error)
             return redirect(url_for('store.landing'))
-        print("ORDER UPDATED!!")
+        flash("Order has been updated")
         return redirect(url_for('store.landing'))
 
 # Store Viewing Single Order Page
@@ -86,6 +86,6 @@ def settings():
         if error:
             print("error updating user details")
             return render_template("store/storeSettings.html", user=current_user)
-        print("Details Updated")
+        flash("Details Updated")
         return redirect(url_for('store.landing'))
     return render_template("store/storeSettings.html", user=current_user)

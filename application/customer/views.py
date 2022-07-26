@@ -49,7 +49,7 @@ def create(storeId):
     if error:
         return "There was an error creating the order"
     else:
-        print("ORDER CREATED!!")
+        flash("Order has been created")
         # flash("order successfully created", 'info')
         return redirect(url_for('customer.landing'))
         
@@ -67,7 +67,7 @@ def order(orderId):
             print("There was an error updating order status")
             print(error)
             return redirect(url_for('customer.landing'))
-        print("ORDER UPDATED!!")
+        flash("Order updated!")
         return redirect(url_for('customer.landing'))
 
 @CUSTOMER_BLUEPRINT.route('/order/waypoint/<string:orderId>', methods=['POST'])
@@ -131,6 +131,6 @@ def settings():
         if error:
             print("error updating user details")
             return render_template("customer/customerSettings.html", user=current_user)
-        print("Details Updated")
+        flash("Details Updated")
         return redirect(url_for('customer.landing'))
     return render_template("customer/customerSettings.html", user=current_user)

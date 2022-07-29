@@ -19,7 +19,7 @@ class UserDb(UserMixin, db.Model):
     postalCode = db.Column(db.Integer, nullable=False)
     unitNumber = db.Column(db.String(50), nullable=False)
     accountType = db.Column(db.Integer, nullable=False)
-    # active = db.Column(db.Boolean(), default=Fale)
+    # active = db.Column(db.Boolean(), default=False)
     
 class OrderDb(db.Model):
     __bind_key__ = 'order'

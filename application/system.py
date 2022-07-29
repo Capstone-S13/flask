@@ -21,6 +21,7 @@ STORE_DELIVERY = 2
 
 INGRESS_POINT = "Ingress Point"
 EGRESS_POINT = "Egress Point"
+BUILDING_NAME = "Building Name"
 
 # RMF Ports
 INTERNAL_PORT = "7171" 
@@ -301,6 +302,10 @@ def get_waypoint(postalCode, unitNumber):
                                         unitNumber=unitNumber).first()
     return ingress.waypoint
 
+def get_building_name(postalCode):
+    building = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=BUILDING_NAME).first()
+    return building.waypoint
+
 def get_ingress_point(postalCode):
     #returns building name
     ingress = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=INGRESS_POINT).first()
@@ -311,11 +316,11 @@ def get_egress_point(postalCode):
     return egress.waypoint
 
 def get_ip_route(postalCode):
-    ingress = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=INGRESS_POINT).first()
+    ingress = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=BUILDING_NAME).first()
     return ingress.ip, ingress.port
 
 def get_map(postalCode):
-    ingress = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=INGRESS_POINT).first()
+    ingress = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=BUILDING_NAME).first()
     return ingress.image, ingress.resolution, ingress.origin, ingress.negate, ingress.occupied_thresh, ingress.free_thresh, ingress.pgm
 
 # def upload_maps(storePostalCode, customerPostalCode):
@@ -604,12 +609,26 @@ def create_starting_ingress():
         f = image.read()
         customerPgm = bytes(f)
 
-    store_ingress = IngressDb(ingressId = str(uuid4()),
+    store_building_name = IngressDb(ingressId = str(uuid4()),
                             postalCode = 123456,
                             unitNumber = INGRESS_POINT,
                             waypoint = "vovi_city",
                             ip = "10.12.192.185",
-                            port = '7171',
+                            port = '7171'
+                            )
+
+    customer_building_name = IngressDb(ingressId = str(uuid4()),
+                            postalCode = 123456,
+                            unitNumber = INGRESS_POINT,
+                            waypoint = "vovi_city",
+                            ip = "10.12.192.185",
+                            port = '7171'
+                            )
+
+    store_ingress = IngressDb(ingressId = str(uuid4()),
+                            postalCode = 123456,
+                            unitNumber = INGRESS_POINT,
+                            waypoint = "ingress",
                             image = 'level_4_map.pgm',
                             resolution = '0.050000',
                             origin = "[-32.457816, -23.565106, 0.000000]",
@@ -618,12 +637,11 @@ def create_starting_ingress():
                             free_thresh = '0.196',
                             pgm = storePgm
                             )
+
     customer_ingress = IngressDb(ingressId = str(uuid4()),
                             postalCode = 987654,
                             unitNumber = INGRESS_POINT,
-                            waypoint = "vovi_city",
-                            ip = "10.12.192.185",
-                            port = '7171',
+                            waypoint = "ingress",
                             image = 'level_4_map_2.pgm',
                             resolution = '0.050000',
                             origin = "[-5.563073, -36.382617, 0.000000]",
@@ -632,13 +650,29 @@ def create_starting_ingress():
                             free_thresh = '0.196',
                             pgm = customerPgm
                             )
+
+    store_egress = IngressDb(ingressId = str(uuid4()),
+                            postalCode = 123456,
+                            unitNumber = EGRESS_POINT,
+                            waypoint = "egress"
+                            )
+
+    customer_egress = IngressDb(ingressId = str(uuid4()),
+                            postalCode = 987654,
+                            unitNumber = EGRESS_POINT,
+                            waypoint = "egress"
+                            )
+
     try:
+        db.session.add(store_building_name)
+        db.session.add(customer_building_name)
         db.session.add(store_ingress)
         db.session.add(customer_ingress)
+        db.session.add(store_egress)
+        db.session.add(customer_egress)
         db.session.commit()
     except Exception as e:
         print(e)
-        return e
 
     waypoints = [["01-01", "pantry"], ["01-02", "coe"], ["01-03", "supplies"], ["01-04", "hardware_2"], ["01-05", "lounge"]]
     for unit, waypoint in waypoints:
@@ -651,7 +685,6 @@ def create_starting_ingress():
             db.session.commit()
         except Exception as e:
             print(e)
-            return e
 
     for unit, waypoint in waypoints:
         new_ingress = IngressDb(ingressId = str(uuid4()),
@@ -663,7 +696,6 @@ def create_starting_ingress():
             db.session.commit()
         except Exception as e:
             print(e)
-            return e
 
     new_robot = RobotDb(robotId = 'external1',
                     availability = 1)
@@ -672,7 +704,6 @@ def create_starting_ingress():
         db.session.commit()
     except Exception as e:
         print(e)
-        return e
 
 
 def create_users():
@@ -690,3 +721,9 @@ def create_users():
                         postalCode = 123456,
                         unitNumber = '01-02',
                         accountType = STORE)
+    try:
+        db.session.add(new_user1)
+        db.session.add(new_user2)
+        db.session.commit()
+    except Exception as e:
+        print(e)

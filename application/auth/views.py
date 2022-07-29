@@ -95,6 +95,17 @@ def signup_post():
             return redirect(url_for('auth.signup'))
         return redirect(url_for('auth.login'))
 
+#########################
+#### Forget Password ####
+#########################
+
+@AUTH_BLUEPRINT.route('/reset', methods=['GET','POST'])
+def reset_password():
+    print('hi')
+    return render_template('auth/reset.html')
+
+
+
 ################
 #### Logout ####
 ################

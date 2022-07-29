@@ -100,9 +100,10 @@ def task_status():
             system.update_task_status(taskId, STATUS_TASK_REQUESTING_EXT_ROBOT)
             system.robot_set_order_status(task.orderId, AT_STORE_HUB)
             ipAddr, port = system.get_ip_route(order.customerPostalCode)
-            buildingName = system.get_ingress_point(order.customerPostalCode)
+            buildingName = system.get_building_name(order.customerPostalCode)
+            waypoint = system.get_egress_point(order.customerPostalCode)
             extrobotId = system.get_external_robot()
-            system.eject_robot(ipAddr, port, taskId, extrobotId, buildingName, system.EGRESS_POINT, order.storePostalCode)
+            system.eject_robot(ipAddr, port, taskId, extrobotId, buildingName, waypoint, order.storePostalCode)
             print("requesting external robot")
 
     # external robot dispatched and sent to egress
@@ -126,9 +127,9 @@ def task_status():
             system.update_task_status(taskId, STATUS_TASK_SENT_TO_STORE_EGRESS)
             system.robot_set_order_status(task.orderId, BETWEEN_HUBS)
             ipAddr, port = system.get_ip_route(order.storePostalCode)
-            buildingName = system.get_ingress_point(order.storePostalCode)
-
-            system.eject_robot(ipAddr, port, taskId, robotId, buildingName, system.EGRESS_POINT, order.customerPostalCode)
+            buildingName = system.get_building_name(order.storePostalCode)
+            waypoint = system.get_egress_point(order.storePostalCode)
+            system.eject_robot(ipAddr, port, taskId, robotId, buildingName, waypoint, order.customerPostalCode)
             print("sent to store egress")
 
     # reached second egress and send for delivery
@@ -138,7 +139,7 @@ def task_status():
             system.robot_set_order_status(task.orderId, DELIVERING_TO_DOORSTEP)
             
             ipAddr, port = system.get_ip_route(order.storePostalCode)
-            buildingName = system.get_ingress_point(order.customerPostalCode)
+            buildingName = system.get_building_name(order.customerPostalCode)
             waypoint = system.get_waypoint(order.customerPostalCode, order.customerUnitNumber)
             system.send_external_task_rmf(ipAddr, port, taskId, buildingName, waypoint, robotId, system.TASK_GO_TO_UNIT, order.orderId)
             print("delivering")

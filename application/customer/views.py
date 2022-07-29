@@ -67,7 +67,11 @@ def order(orderId):
             print("There was an error updating order status")
             print(error)
             return redirect(url_for('customer.landing'))
-        flash("Order updated!")
+        if new_status == ORDER_RECEIVED:
+            flash("Order received!")
+        else:
+            flash("Order updated!")
+
         return redirect(url_for('customer.landing'))
 
 # Setting Waypoint for Collection
@@ -79,6 +83,7 @@ def set_waypoint(orderId):
         new_waypoint = request.form["waypoint_selected"]
         print(new_waypoint)
         system.set_new_waypoint(orderId, new_waypoint)
+        flash(f"Waypoint updated to {new_waypoint}!")
         return redirect(url_for('customer.landing'))
     return redirect(url_for('customer.landing'))
 

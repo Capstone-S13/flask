@@ -1,10 +1,8 @@
-import ipaddress
-from tkinter import E
 from sqlalchemy import true
 import requests
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from application.models import db, UserDb, OrderDb, IngressDb, TaskDb
+from application.models import db, UserDb, OrderDb, IngressDb, TaskDb, RobotDb
 # from application import maps
 from uuid import uuid4
 
@@ -396,6 +394,26 @@ def set_new_waypoint(orderId, new_waypoint):
             print(e)
             return e
         
+##################
+#### ROBOT DB ####
+##################
+
+def get_external_robot():
+    robot = RobotDb.query.filter_by(availability=1).first()
+    try:
+        robot.availability = 0
+        db.session.commit()
+        return robot.robotId
+    except Exception as e:
+        print(e)
+    
+def set_robot_avail(robotId, status):
+    robot = RobotDb.query.get_or_404(robotId)
+    try:
+        robot.availbility = status
+        db.session.commit()
+    except Exception as e:
+        print(e)
 
 #############
 #### RMF ####
@@ -646,3 +664,29 @@ def create_starting_ingress():
         except Exception as e:
             print(e)
             return e
+
+    new_robot = RobotDb(robotId = 'external1',
+                    availability = 1)
+    try:
+        db.session.add(new_robot)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return e
+
+
+def create_users():
+    new_user1 = UserDb(id = str(uuid4()),
+                        email = 'john@gmail.com',
+                        name = 'John',
+                        password = generate_password_hash('1234', method='sha256'),
+                        postalCode = 987654,
+                        unitNumber = '01-02',
+                        accountType = CUSTOMER)
+    new_user2 = UserDb(id = str(uuid4()),
+                        email = 'grab@gmail.com',
+                        name = 'Grab',
+                        password = generate_password_hash('1234', method='sha256'),
+                        postalCode = 123456,
+                        unitNumber = '01-02',
+                        accountType = STORE)

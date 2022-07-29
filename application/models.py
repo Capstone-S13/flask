@@ -1,6 +1,6 @@
 # from base import app
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import UserMixin
+# from flask_security import UserMixin
 from flask_login import UserMixin
 from datetime import datetime
 
@@ -8,7 +8,8 @@ db = SQLAlchemy()
 
 dbBind = {'order': 'sqlite:///database/order.db',
           'ingress': 'sqlite:///database/ingress.db',
-          'task': 'sqlite:///database/task.db'}
+          'task': 'sqlite:///database/task.db',
+          'robot': 'sqlite:///database/robot.db'}
 
 class UserDb(UserMixin, db.Model):
     id = db.Column(db.String(100), primary_key=True)
@@ -58,5 +59,10 @@ class TaskDb(db.Model):
     status = db.Column(db.String(100), nullable=False)
     orderId = db.Column(db.String(100), nullable=False)
     robotId = db.Column(db.String(100))
+
+class RobotDb(db.Model):
+    __bind_key__ = "robot"
+    robotId = db.Column(db.String(100), primary_key=True)
+    availability = db.Column(db.Integer, nullable=False)
 
 # db.create_all()

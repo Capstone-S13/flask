@@ -60,7 +60,12 @@ def order(orderId):
             print("There was an error updating order status")
             print(error)
             return redirect(url_for('store.landing'))
-        flash("Order has been updated")
+        if new_status == STORING_IN_STORE_HUB:
+            flash("Order deposited!")
+        elif new_status == ROBOT_DISPATCHED:
+            flash("Robot dispatched!")
+        else:
+            flash("Order has been updated!")
         return redirect(url_for('store.landing'))
 
 # Store Viewing Single Order Page

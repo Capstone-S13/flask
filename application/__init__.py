@@ -39,10 +39,12 @@ def register_blueprints(app):
     from application.auth import AUTH_BLUEPRINT
     from application.customer import CUSTOMER_BLUEPRINT
     from application.store import STORE_BLUEPRINT
+    from application.rmf import RMF_BLUEPRINT
     
     app.register_blueprint(AUTH_BLUEPRINT)
     app.register_blueprint(CUSTOMER_BLUEPRINT, url_prefix='/customer')
     app.register_blueprint(STORE_BLUEPRINT, url_prefix='/store')
+    app.register_blueprint(RMF_BLUEPRINT)
 
 # def register_security(app, user_db):
 #     security = Security()

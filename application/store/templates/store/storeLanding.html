@@ -35,6 +35,21 @@
         <a class="nav-link orange" href="javascript:void(0)" onclick="openTab(event, 'Delivery');">Delivery</a>
       </nav>
 
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        
+        {% for message in messages %}
+    
+          <div class="alert alert-primary alert-dismissible fade show" role="alert">
+       
+          {{ message }}
+        </div>
+        {% endfor %}
+    
+      {% endif %}
+    {% endwith %}
+    {% block body %}{% endblock %}
+
       <div id="Incoming" class="container p-3" style="display:block">
         <div class="row p-3">
           {% for order in incoming %}
@@ -100,20 +115,7 @@
     {% endblock content %}
 
 
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      
-      {% for message in messages %}
-  
-        <div class="alert alert-primary alert-dismissible fade show" role="alert">
-     
-        {{ message }}
-      </div>
-      {% endfor %}
-  
-    {% endif %}
-  {% endwith %}
-  {% block body %}{% endblock %}
+
   </body>
 
   <script>

@@ -17,7 +17,7 @@ def internal_task():
     print(f"Order ID: {json_req['order']['id']}")
     print(f"Company Name: {json_req['order']['company_name']}")
     
-    sleep(20)
+    sleep(5)
     url = f"http://{HOST_URL}:5000/task-status"
     print("internal task completed")
 
@@ -42,7 +42,7 @@ def external_task():
     print(f"Order ID: {json_req['order']['id']}")
     print(f"Company Name: {json_req['order']['company_name']}")
 
-    sleep(20)
+    sleep(5)
     url = f"http://{HOST_URL}:5000/task-status"
     print("external task completed")
     requests.post(url, json={
@@ -70,7 +70,7 @@ def eject_robot():
 
     print(f"Map Name: {json_req['map']['image']}")
     print(f"Initial Pose: {json_req['initial_pose']}")
-    sleep(30)
+    sleep(5)
     url = f"http://{HOST_URL}:5000/task-status"
     print("robot ejecting")
     requests.post(url, json={
@@ -82,7 +82,7 @@ def eject_robot():
                             "status": 1
                             })
 
-    sleep(20)
+    sleep(5)
     print("robot ejected")
     requests.post(url, json={
                             "robot":

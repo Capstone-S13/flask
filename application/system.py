@@ -269,7 +269,9 @@ def robot_set_order_status(orderId, status):
     except Exception as e:
             print(e)
             return e
-    return "Order does not belong to user!"
+
+def get_all_orders():
+    return OrderDb.query.all()
 
 ####################
 #### INGRESS DB ####

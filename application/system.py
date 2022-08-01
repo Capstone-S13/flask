@@ -238,7 +238,6 @@ def set_order_status(userId, orderId, status):
                 taskId = create_task(orderId)
                 ipAddr, port = get_ip_route(order_to_update.storePostalCode)
                 print(ipAddr, port)
-                # test_json('10.12.192.185', '7171', taskId, "vovi_city", "pantry", 'nil', TASK_GO_TO_UNIT, 'nil')
                 send_internal_task_rmf(ipAddr, port, taskId, buildingName, waypoint, 'nil', TASK_GO_TO_UNIT, 'nil')
             
             # Store put parcel in robot and sent it back to hub
@@ -255,10 +254,6 @@ def set_order_status(userId, orderId, status):
                 update_task_status(curr_task.taskId, STATUS_TASK_RECEIVED)
                 ipAddr, port = get_ip_route(order_to_update.customerPostalCode)
                 send_external_task_rmf(ipAddr, port, curr_task.taskId, buildingName, 'lounge', curr_task.robotId, TASK_GO_TO_UNIT, 'nil')
-            #     buildingName = get_building_name(order_to_update.storePostalCode)
-            #     waypoint = IngressDb.query.filter_by(postalCode=order_to_update.storePostalCode,
-            #                                         unitNumber=order_to_update.storeUnitNumber).first()
-            #     send_order_rmf(order_to_update.status, buildingName, waypoint)
             return False
         except Exception as e:
             print(e)
@@ -298,7 +293,7 @@ def get_all_waypoints(postalCode):
     data_lst = IngressDb.query.filter_by(postalCode=postalCode).all()
     waypoints = []
     for data in data_lst:
-        if data.unitNumber != "Ingress Point":
+        if data.unitNumber != INGRESS_POINT and data.unitNumber != BUILDING_NAME and data.unitNumber != EGRESS_POINT:
             waypoints.append(data.waypoint)
     return waypoints
 
@@ -328,22 +323,6 @@ def get_ip_route(postalCode):
 def get_map(postalCode):
     ingress = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=INGRESS_POINT).first()
     return ingress.image, ingress.resolution, ingress.origin, ingress.negate, ingress.occupied_thresh, ingress.free_thresh, ingress.pgm
-
-# def upload_maps(storePostalCode, customerPostalCode):
-#     storeIngress = IngressDb.query.filter_by(postalCode=storePostalCode, unitNumber=INGRESS_POINT).first()
-#     customerIngress = IngressDb.query.get_or_404(customerPostalCode)
-#     storeyaml = maps.level_4_map.yaml
-#     customeryaml = maps.level_4_map_2.yaml
-#     try:
-#         storeIngress.image = storeyaml.image
-#         storeIngress.resolution = f'{storeyaml.resolution}'
-#         storeIngress.origin = f'{storeyaml.origin}'
-#         storeIngress.negate = storeyaml.negate
-#         storeIngress.occupied_thresh = f'{storeyaml.occupied_thresh}'
-#         storeIngress.free_thresh = f'{storeyaml.free_thresh}'
-#         storeIngress.pgm = f'{maps.level_4_map.pgm}'
-#     except Exception as e:
-#         print(e)
 
 def set_ip_port(postalCode, ip, port):
     ingress_to_update = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=INGRESS_POINT).first()
@@ -401,7 +380,6 @@ def set_new_waypoint(orderId, new_waypoint):
             robot_set_order_status(orderId, DELIVERING_TO_DOORSTEP)
             ipAddr, port = get_ip_route(order.customerPostalCode)
             buildingName = get_building_name(order.customerPostalCode)
-            # waypoint = get_waypoint(order.customerPostalCode, order.customerUnitNumber)
             send_external_task_rmf(ipAddr, port, task_to_update.taskId, buildingName, new_waypoint, task_to_update.robotId, TASK_GO_TO_UNIT, order.orderId)
         except Exception as e:
             print(e)
@@ -569,13 +547,6 @@ def eject_robot(ipAddr, port, taskId, robotId, buildingName, unit, postalCode):
                                 },
                             "map":
                                 {
-                                    # 'image': "file_name.pgm",
-                                    # 'resolution': 0.2,
-                                    # 'origin': [0,1,2],
-                                    # 'negate': 0,
-                                    # 'occupied_thresh': 0.1,
-                                    # 'free_thresh': 0.1,
-                                    # 'pgm': 'pgm_string'
                                     'image': f'{image}',
                                     'resolution': float(resolution),
                                     'origin': [float(x) for x in origin],

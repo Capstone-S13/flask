@@ -32,8 +32,7 @@ FAILED = "Failed"
 def landing():
     stores = system.get_all_stores()
     storeNames, delivery, waypoints = system.get_customer_orders(current_user.id)
-
-    print(delivery)
+    # print(delivery)
     return render_template("customer/customerLanding.html",
                            customerId=current_user.id,
                            stores = stores,
@@ -59,7 +58,7 @@ def create(storeId):
 def order(orderId):
     if request.method == "POST":
         new_status = request.form["order_button"]
-        print(new_status)
+        # print(new_status)
         error = system.set_order_status(current_user.id,
                                         orderId,
                                         new_status)
@@ -79,47 +78,11 @@ def order(orderId):
 @login_required
 def set_waypoint(orderId):
     if request.method == "POST":
-        print(request.form)
         new_waypoint = request.form["waypoint_selected"]
-        print(new_waypoint)
         system.set_new_waypoint(orderId, new_waypoint)
         flash(f"Waypoint updated to {new_waypoint}!")
         return redirect(url_for('customer.landing'))
     return redirect(url_for('customer.landing'))
-
-# Customer Viewing Single Order
-# @CUSTOMER_BLUEPRINT.route('/order/<string:orderId>', methods=['POST', 'GET'])
-# @login_required
-# def order(orderId):
-#     order = system.get_order(orderId)
-#     return render_template("order.html", order=order, id=current_user.id)
-
-# Customer Delete Order
-# look at delete_order in system
-# @CUSTOMER_BLUEPRINT.route('/order/<string:orderId>/delete')
-# @login_required
-# def delete(orderId):
-#     deleteStatus = system.delete_order(current_user.id, orderId)
-    # flash('order deleted', 'info')
-    
-    # if order_to_delete.customerId == current_user.id:
-    #     try:
-    #         OrderDb.session.delete(order_to_delete)
-    #         OrderDb.session.commit()
-    #         return redirect("/customer/landing")
-    #     except:
-    #         return "There was an error deleting the order"
-    # else:
-    #     return "Order does not belong to user"
-    # return
-
-# Customer Retrieve Order RobotId (refresh button?)
-# @CUSTOMER_BLUEPRINT.route('/order/<string:orderId>/robotId')
-# @login_required
-
-# Customer Retrieve Order Status (refresh button?)
-# @CUSTOMER_BLUEPRINT.route('/order/<string:orderId>/status')
-# @login_required
 
 ################################
 #### Customer Settings Page ####

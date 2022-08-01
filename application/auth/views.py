@@ -105,8 +105,6 @@ def reset_password():
     print('hi')
     return render_template('auth/reset.html')
 
-
-
 ################
 #### Logout ####
 ################

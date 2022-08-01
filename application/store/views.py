@@ -68,13 +68,6 @@ def order(orderId):
             flash("Order has been updated!")
         return redirect(url_for('store.landing'))
 
-# Store Viewing Single Order Page
-# @STORE_BLUEPRINT.route(/<string:current_user.id>/order/<string:orderId>', methods=['POST', 'GET'])
-# @login_required
-# def order(orderId):
-#     order = system.get_order(current_user.id, orderId)
-#     return render_template("order.html", order=order, current_user.id=current_user.id)
-
 #############################
 #### Store Settings Page ####
 #############################

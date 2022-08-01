@@ -95,7 +95,6 @@
                 <h5 class="card-title text-color">Order from: {{customerNames[order.customerId]}}</h5>
                 <p class="card-text text-color">Status: {{order.status}}</p>
                 {% if order.status == "Waiting for Parcel" %}
-                    <h5 class="card-title text-color">Order From: {{customerNames[order.customerId]}}</h5>
                     <p class="card-text text-color">Date and time: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
                     <form action="/store/order/{{order.orderId}}" method="post">
                       <button name="parcel_button" value="Storing in Store Hub" class="m-1 btn col btn-outline-red">Parcel Deposited</button>

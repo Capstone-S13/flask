@@ -75,7 +75,7 @@
                   <h5 class="card-title text-color">Order From: {{storeNames[order.storeId]}}</h5>
                   <p class="card-text text-color">Date and time: {{order.dateCreated.strftime('%Y-%m-%d, at %H:%M')}}</p>
                   <p class="card-text text-color">Status: {{order.status}}</p>
-                  {% if order.status == "Delivering to Doorstep" %}
+                  {% if order.status == "Delivering to Doorstep" or order.status == "Arrived" %}
                     <form action="/customer/order/waypoint/{{order.orderId}}" method="post">
                       <label class="form-select for="waypoints">
                         <select id="waypoints" name="waypoint_selected">
@@ -86,9 +86,11 @@
                         <button type="submit" class="m-1 btn col btn-outline-red">Confirm Waypoint</button>
                       </label>
                     </form>
+                    {% if order.status == "Arrived" %}
                     <form action="/customer/order/{{order.orderId}}" method="post">
                       <button name="order_button" value="Delivered" class="m-1 btn col btn-outline-green">Order Received</button>
                     </form>
+                    {% endif %}
                   {% endif %}
                   <!-- <span class="card-text text-color">instructions here</span> --> 
                 </div>

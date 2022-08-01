@@ -48,7 +48,8 @@ STATUS_TASK_EXT_ROBOT_DISPATCHED = 4
 STATUS_TASK_COLLECTING_FROM_STORE_HUB = 5
 STATUS_TASK_SENT_TO_STORE_EGRESS = 6
 STATUS_TASK_DELIVERING = 7
-STATUS_TASK_RECEIVED = 8
+STATUS_TASK_ARRIVED = 8
+STATUS_TASK_RECEIVED = 9
 
 #########################
 #### RMF Task Status ####
@@ -143,6 +144,12 @@ def task_status():
             waypoint = system.get_waypoint(order.customerPostalCode, order.customerUnitNumber)
             system.send_external_task_rmf(ipAddr, port, taskId, buildingName, waypoint, robotId, system.TASK_GO_TO_UNIT, order.orderId)
             print("delivering")
+
+    elif int(task.status) == STATUS_TASK_DELIVERING:
+        if status == 1:
+            system.update_task_status(taskId, STATUS_TASK_ARRIVED)
+            system.robot_set_order_status(task.orderId, ARRIVED)
+            print("robot arrived")
 
     # order collected
     elif int(task.status) == STATUS_TASK_DELIVERING:

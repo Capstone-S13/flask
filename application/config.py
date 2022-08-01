@@ -6,7 +6,7 @@ class BaseConfig:
     BASE_DIR = Path(__file__).parent.parent
     
     FLASK_ENV = 'development'
-    DEBUG = False
+    DEBUG = True
     TESTING = False
     WTF_CSRF_ENABLED = True
     

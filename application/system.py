@@ -6,6 +6,9 @@ from application.models import db, UserDb, OrderDb, IngressDb, TaskDb, RobotDb
 # from application import maps
 from uuid import uuid4
 
+HOST_URL = "172.23.31.173"
+# HOST_URL = "10.12.112.72"
+
 # Account Type
 CUSTOMER = 0
 STORE = 1
@@ -71,7 +74,8 @@ STATUS_TASK_EXT_ROBOT_DISPATCHED = 4
 STATUS_TASK_COLLECTING_FROM_STORE_HUB = 5
 STATUS_TASK_SENT_TO_STORE_EGRESS = 6
 STATUS_TASK_DELIVERING = 7
-STATUS_TASK_RECEIVED = 8
+STATUS_TASK_ARRIVED = 8
+STATUS_TASK_RECEIVED = 9
 
 #################
 #### USER DB ####
@@ -181,7 +185,7 @@ def get_customer_orders(customerId):
         if id not in storeNames:
             newName = UserDb.query.filter_by(id=id).first().name
             storeNames[id] = newName
-        if order.status == DELIVERING_TO_DOORSTEP:
+        if order.status == DELIVERING_TO_DOORSTEP or order.status==ARRIVED:
             waypoints = get_all_waypoints(order.customerPostalCode)
             order_waypoints[order.orderId] = waypoints
     return storeNames, orders, order_waypoints
@@ -229,7 +233,7 @@ def set_order_status(userId, orderId, status):
             # Store request for parcel to be picked up
             if status == ROBOT_DISPATCHED:
                 print(status)
-                buildingName = get_ingress_point(order_to_update.storePostalCode)
+                buildingName = get_building_name(order_to_update.storePostalCode)
                 waypoint = get_waypoint(order_to_update.storePostalCode, order_to_update.storeUnitNumber)
                 taskId = create_task(orderId)
                 ipAddr, port = get_ip_route(order_to_update.storePostalCode)
@@ -244,13 +248,14 @@ def set_order_status(userId, orderId, status):
                 ipAddr, port = get_ip_route(order_to_update.storePostalCode)
                 send_internal_task_rmf(ipAddr, port, curr_task.taskId, 'nil', 'nil', curr_task.robotId, TASK_DELIVER_TO_HUB, orderId)
 
-            # Customer request for parcel to be delivered from destination hub
+            # Customer received their order
             elif status == DELIVERED:
                 curr_task = TaskDb.query.filter_by(orderId=orderId).first()
+                buildingName = get_building_name(order_to_update.customerPostalCode)
                 update_task_status(curr_task.taskId, STATUS_TASK_RECEIVED)
                 ipAddr, port = get_ip_route(order_to_update.customerPostalCode)
-                send_external_task_rmf(ipAddr, port, curr_task.taskId, 'lounge', 'nil', curr_task.robotId, TASK_GO_TO_UNIT, 'nil')
-            #     buildingName = get_ingress_point(order_to_update.storePostalCode)
+                send_external_task_rmf(ipAddr, port, curr_task.taskId, buildingName, 'lounge', curr_task.robotId, TASK_GO_TO_UNIT, 'nil')
+            #     buildingName = get_building_name(order_to_update.storePostalCode)
             #     waypoint = IngressDb.query.filter_by(postalCode=order_to_update.storePostalCode,
             #                                         unitNumber=order_to_update.storeUnitNumber).first()
             #     send_order_rmf(order_to_update.status, buildingName, waypoint)
@@ -317,10 +322,11 @@ def get_egress_point(postalCode):
 
 def get_ip_route(postalCode):
     ingress = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=BUILDING_NAME).first()
+    print(ingress)
     return ingress.ip, ingress.port
 
 def get_map(postalCode):
-    ingress = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=BUILDING_NAME).first()
+    ingress = IngressDb.query.filter_by(postalCode=postalCode, unitNumber=INGRESS_POINT).first()
     return ingress.image, ingress.resolution, ingress.origin, ingress.negate, ingress.occupied_thresh, ingress.free_thresh, ingress.pgm
 
 # def upload_maps(storePostalCode, customerPostalCode):
@@ -385,14 +391,16 @@ def update_task_robot(taskId, robotId):
 def set_new_waypoint(orderId, new_waypoint):
     task_to_update = TaskDb.query.filter_by(orderId=orderId).first()
     order = get_order(orderId)
-    if order.status == DELIVERING_TO_DOORSTEP:
+    if order.status == DELIVERING_TO_DOORSTEP or order.status == ARRIVED:
         try:
             unitNumber = IngressDb.query.filter_by(postalCode=order.customerPostalCode,
                                                     waypoint=new_waypoint).first().unitNumber
             order.customerUnitNumber = unitNumber
             db.session.commit()
+            update_task_status(task_to_update.taskId, STATUS_TASK_DELIVERING)
+            robot_set_order_status(orderId, DELIVERING_TO_DOORSTEP)
             ipAddr, port = get_ip_route(order.customerPostalCode)
-            buildingName = get_ingress_point(order.customerPostalCode)
+            buildingName = get_building_name(order.customerPostalCode)
             # waypoint = get_waypoint(order.customerPostalCode, order.customerUnitNumber)
             send_external_task_rmf(ipAddr, port, task_to_update.taskId, buildingName, new_waypoint, task_to_update.robotId, TASK_GO_TO_UNIT, order.orderId)
         except Exception as e:
@@ -430,7 +438,7 @@ def set_robot_avail(robotId, status):
 
 def test_json(ipAddr, port, taskId, buildingName, unit, robotId, task, orderId):
     print("testing has started")
-    url = "http://172.23.31.173:5000/task-test"
+    url = f"http://{HOST_URL}:5000/task-test"
     requests.post(url, json={
                             "task_id": taskId,                            
                             "address":
@@ -456,7 +464,7 @@ def test_json(ipAddr, port, taskId, buildingName, unit, robotId, task, orderId):
 # "http://10.12.192.185:7171/internal-task"
 def send_internal_task_rmf(ipAddr, port, taskId, buildingName, unit, robotId, task, orderId):
     url = f"http://{ipAddr}:" + port + "/internal-task"
-    url = "http://172.23.31.173:80/internal-task"
+    url = f"http://{HOST_URL}:80/internal-task"
     print(url)
     print(buildingName, unit)
     print(taskId)
@@ -488,7 +496,7 @@ def send_internal_task_rmf(ipAddr, port, taskId, buildingName, unit, robotId, ta
 # "http://10.12.192.185:7171/external-task"
 def send_external_task_rmf(ipAddr, port, taskId, buildingName, unit, robotId, task, orderId):
     url = f"http://{ipAddr}:" + port + "/external-task"
-    url = "http://172.23.31.173:80/external-task"
+    url = f"http://{HOST_URL}:80/external-task"
     requests.post(url, json={
                             "task_id": taskId,                            
                             "destination":
@@ -540,14 +548,14 @@ def send_external_task_rmf(ipAddr, port, taskId, buildingName, unit, robotId, ta
 # "http://10.12.192.185:7171/eject-robot"
 def eject_robot(ipAddr, port, taskId, robotId, buildingName, unit, postalCode):
     url = f"http://{ipAddr}:" + port + "/eject-robot"
-    url = "http://172.23.31.173:80/eject-robot"
+    url = f"http://{HOST_URL}:80/eject-robot"
     image, resolution, origin, negate, occupied_thresh, free_thresh, pgm = get_map(postalCode)
     origin = origin[1:-1].split(",")
     requests.post(url, json={
                             "task_id":f'{taskId}',
                             "robot":
                                 {
-                                    'robot':f'{robotId}'
+                                    'id':f'{robotId}'
                                 },
                             "egress_point":
                                 {
@@ -611,16 +619,16 @@ def create_starting_ingress():
 
     store_building_name = IngressDb(ingressId = str(uuid4()),
                             postalCode = 123456,
-                            unitNumber = INGRESS_POINT,
+                            unitNumber = BUILDING_NAME,
                             waypoint = "vovi_city",
                             ip = "10.12.192.185",
                             port = '7171'
                             )
 
     customer_building_name = IngressDb(ingressId = str(uuid4()),
-                            postalCode = 123456,
-                            unitNumber = INGRESS_POINT,
-                            waypoint = "vovi_city",
+                            postalCode = 987654,
+                            unitNumber = BUILDING_NAME,
+                            waypoint = "residential_building",
                             ip = "10.12.192.185",
                             port = '7171'
                             )

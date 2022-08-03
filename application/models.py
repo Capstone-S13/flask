@@ -33,7 +33,7 @@ class OrderDb(db.Model):
     orderDetails = db.Column(db.String(1000), nullable=False) # do we need this since we just doing 1 item per store
     status = db.Column(db.String(100), nullable=False)
     robotID = db.Column(db.String(100))
-    dateCreated = db.Column(db.DateTime, default=datetime.utcnow)
+    dateCreated = db.Column(db.DateTime, default=datetime.now)
 
 class IngressDb(db.Model):
     __bind_key__ = 'ingress'

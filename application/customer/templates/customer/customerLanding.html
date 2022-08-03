@@ -55,7 +55,7 @@
             {% for store in stores %}
               <div class="col-sm-6 mb-3">
                 <div class="card">
-                  <img src="https://static.wikia.nocookie.net/logopedia/images/c/c0/GrabFood_%282016%29.svg/revision/latest?cb=20210219083903" class="card-img-top" alt="...">
+                  <img src={{storeLinks[store.name]}} class="card-img-top" alt="...">
                   <div class="card-body">
                     <h5 class="card-title text-color text-center">{{store.name}}</h5>
                     <a href="/customer/create/{{store.id}}" class="btn btn-yellow btn-block">Buy here</a>

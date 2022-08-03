@@ -33,12 +33,18 @@ def landing():
     stores = system.get_all_stores()
     storeNames, delivery, waypoints = system.get_customer_orders(current_user.id)
     # print(delivery)
+    stores = [stores[0], stores[2], stores[1]]
     return render_template("customer/customerLanding.html",
                            customerId=current_user.id,
                            stores = stores,
                            storeNames=storeNames,
                            delivery=delivery,
-                           waypoints = waypoints)
+                           waypoints = waypoints,
+                           storeLinks = {
+                                        'Grabbly': 'https://img.squadhelp.com/story_images/visual_images/1645022906-grabbly1.png?class=show',
+                                        'Shoppee': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEsd5WmP1xg0StBYLO_NaoGG3Cw4JplQcwYw&usqp=CAU',
+                                        'Vendor': 'https://i.imgur.com/ixqar30.jpg'
+                                        })
 
 # Customer Creating Order
 @CUSTOMER_BLUEPRINT.route('/create/<string:storeId>')

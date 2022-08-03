@@ -30,9 +30,14 @@ def all_orders():
     all_orders = system.get_all_orders()
     return render_template("order/order.html", all_orders=all_orders)
 
-@ORDER_BLUEPRINT.route('/<string:orderId>', methods=['GET', 'POST'])
+@ORDER_BLUEPRINT.route('/status/<string:orderId>', methods=['GET', 'POST'])
 def single_order(orderId):
     if request.method == "POST":
         system.robot_set_order_status(orderId, request.form['status_button'])
         return redirect(url_for('order.all_orders'))
     return render_template("order/single_order.html", orderId=orderId, status_lst=status_lst)
+
+@ORDER_BLUEPRINT.route('/delete_all', methods=['GET', 'POST'])
+def delete_all_orders():
+    system.delete_all_orders()
+    return redirect(url_for('order.all_orders'))

@@ -7,7 +7,7 @@
 {% block content %}
     <body class="text-center">
         {% for order in all_orders %}
-            <form action="/order/{{order.orderId}}">
+            <form action="/order/status/{{order.orderId}}">
             <button class="m-1 btn col btn-outline-green">{{ order.orderId }}</button>
             </form>
         {% endfor %}

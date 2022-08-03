@@ -273,6 +273,13 @@ def robot_set_order_status(orderId, status):
 def get_all_orders():
     return OrderDb.query.all()
 
+def delete_all_orders():
+    try:
+        OrderDb.query.delete()
+        db.session.commit()
+    except Exception as e:
+        print(e)
+
 ####################
 #### INGRESS DB ####
 ####################
@@ -693,18 +700,42 @@ def create_users():
                         name = 'John',
                         password = generate_password_hash('1234', method='sha256'),
                         postalCode = 987654,
-                        unitNumber = '01-02',
+                        unitNumber = '01-04',
                         accountType = CUSTOMER)
     new_user2 = UserDb(id = str(uuid4()),
-                        email = 'grab@gmail.com',
-                        name = 'Grab',
+                        email = 'rebecca@gmail.com',
+                        name = 'Rebecca',
+                        password = generate_password_hash('1234', method='sha256'),
+                        postalCode = 123456,
+                        unitNumber = '01-01',
+                        accountType = CUSTOMER)
+    new_user3 = UserDb(id = str(uuid4()),
+                        email = 'grabbly@gmail.com',
+                        name = 'Grabbly',
                         password = generate_password_hash('1234', method='sha256'),
                         postalCode = 123456,
                         unitNumber = '01-02',
                         accountType = STORE)
+    new_user4 = UserDb(id = str(uuid4()),
+                        email = 'shoppee@gmail.com',
+                        name = 'Shoppee',
+                        password = generate_password_hash('1234', method='sha256'),
+                        postalCode = 123456,
+                        unitNumber = '01-03',
+                        accountType = STORE)
+    new_user5 = UserDb(id = str(uuid4()),
+                        email = 'vendor@gmail.com',
+                        name = 'Vendor',
+                        password = generate_password_hash('1234', method='sha256'),
+                        postalCode = 123456,
+                        unitNumber = '01-03',
+                        accountType = STORE)
     try:
         db.session.add(new_user1)
         db.session.add(new_user2)
+        db.session.add(new_user3)
+        db.session.add(new_user4)
+        db.session.add(new_user5)
         db.session.commit()
     except Exception as e:
         print(e)

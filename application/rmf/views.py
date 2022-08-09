@@ -104,6 +104,7 @@ def task_status():
             buildingName = system.get_building_name(order.customerPostalCode)
             waypoint = system.get_egress_point(order.customerPostalCode)
             extrobotId = system.get_external_robot()
+            system.set_robot_avail(extrobotId, 0)
             system.eject_robot(ipAddr, port, taskId, extrobotId, buildingName, waypoint, order.storePostalCode)
             print("requesting external robot")
 
